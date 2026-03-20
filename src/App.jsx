@@ -97,8 +97,10 @@ export default function DeosotongCompanyHomepage() {
     email: "",
     field: "",
     people: "",
+    location: "",
     schedule: "",
-    budget: "",
+    budget_min: "",
+    budget_max: "",
     message: "",
   });
 
@@ -126,9 +128,10 @@ export default function DeosotongCompanyHomepage() {
           phone: formData.phone,
           email: formData.email,
           field: formData.field,
-          people: formData.people,
+          people: formData.people,          location: formData.location,
           schedule: formData.schedule,
-          budget: formData.budget,
+          budget_min: formData.budget_min,
+          budget_max: formData.budget_max,
           message: formData.message,
         }),
       });
@@ -137,15 +140,17 @@ export default function DeosotongCompanyHomepage() {
       if (!result.success) throw new Error("문의 전송 실패");
 
       alert("문의가 정상 접수되었습니다.");
-      setFormData({
+            setFormData({
         company: "",
         manager: "",
         phone: "",
         email: "",
         field: "",
         people: "",
+        location: "",
         schedule: "",
-        budget: "",
+        budget_min: "",
+    budget_max: "",
         message: "",
       });
     } catch (error) {
@@ -579,8 +584,10 @@ export default function DeosotongCompanyHomepage() {
                   ["이메일", "email"],
                   ["교육 희망 분야", "field"],
                   ["대상 인원", "people"],
+                  ["예상 강의장소", "location"],
                   ["희망 일정", "schedule"],
-                  ["예산 범위", "budget"],
+                  ["예산 최소 금액", "budget_min"],
+                  ["예산 최대 금액", "budget_max"],
                 ].map(([label, key]) => (
                   <label key={label} className="text-sm text-slate-700">
                     <div className="mb-2 font-medium">{label}</div>
