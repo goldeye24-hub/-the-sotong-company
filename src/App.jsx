@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 
 import {
@@ -22,7 +21,8 @@ import {
   MonitorCheck,
 } from "lucide-react";
 
-const representativeImage = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O//AARCADIAMgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/...";
+const representativeImage = "/kwon-profile.png";
+const WEB3FORMS_ACCESS_KEY = "b9e281e2-547a-4280-8f47-96b69aa10334";
 
 const serviceMeta = {
   "조직활성화": { icon: Users, accent: "from-slate-700 to-slate-500" },
@@ -90,8 +90,71 @@ function DeosotongLogo({ compact = false }) {
 }
 
 export default function DeosotongCompanyHomepage() {
+  const [formData, setFormData] = useState({
+    company: "",
+    manager: "",
+    phone: "",
+    email: "",
+    field: "",
+    people: "",
+    schedule: "",
+    budget: "",
+    message: "",
+  });
+
+  const handleChange = (key, value) => {
+    setFormData((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: `[더소통컴퍼니 교육문의] ${formData.company || formData.manager || "홈페이지 문의"}`,
+          from_name: "더소통컴퍼니 홈페이지",
+          replyto: formData.email,
+          company: formData.company,
+          manager: formData.manager,
+          phone: formData.phone,
+          email: formData.email,
+          field: formData.field,
+          people: formData.people,
+          schedule: formData.schedule,
+          budget: formData.budget,
+          message: formData.message,
+        }),
+      });
+
+      const result = await response.json();
+      if (!result.success) throw new Error("문의 전송 실패");
+
+      alert("문의가 정상 접수되었습니다.");
+      setFormData({
+        company: "",
+        manager: "",
+        phone: "",
+        email: "",
+        field: "",
+        people: "",
+        schedule: "",
+        budget: "",
+        message: "",
+      });
+    } catch (error) {
+      alert("문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+    }
+  };
   const [repImageError, setRepImageError] = useState(false);
-  const menu = ["HOME", "회사소개", "교육프로그램", "교육운영", "교육문의"];
+  const [showCompanyDetail, setShowCompanyDetail] = useState(false);
+  const menu = ["HOME", "회사소개", "교육프로그램", "교육문의"];
 
   const services = [
     {
@@ -199,16 +262,16 @@ export default function DeosotongCompanyHomepage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
-          <DeosotongLogo />
-          <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 lg:flex">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 lg:px-10 lg:py-4">
+          <DeosotongLogo compact />
+          <nav className="flex items-center gap-3 overflow-x-auto whitespace-nowrap text-[12px] font-medium text-slate-600 sm:gap-4 sm:text-sm lg:gap-8">
             {menu.map((item) => (
-              <a key={item} href={`#${item}`} className="transition hover:text-slate-900">
+              <a key={item} href={`#${item}`} className="shrink-0 transition hover:text-slate-900">
                 {item}
               </a>
             ))}
           </nav>
-          <a href="#교육문의" className="rounded-full bg-slate-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-slate-800">
+          <a href="#교육문의" className="shrink-0 rounded-full bg-slate-900 px-3 py-2 text-[11px] font-medium text-white shadow-sm hover:bg-slate-800 sm:px-4 sm:text-xs lg:px-5 lg:py-2.5 lg:text-sm">
             상담문의
           </a>
         </div>
@@ -216,16 +279,16 @@ export default function DeosotongCompanyHomepage() {
 
       <main>
         <section id="HOME" className="relative overflow-hidden bg-[linear-gradient(135deg,#f8fafc_0%,#eef4f8_50%,#e8eef5_100%)]">
-          <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-[1fr_0.95fr] lg:px-10 lg:py-24">
+          <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 sm:py-14 lg:grid-cols-[1fr_0.95fr] lg:px-10 lg:py-24">
             <div className="flex flex-col justify-center">
               <div className="mb-5 inline-flex w-fit rounded-full border border-slate-200 bg-white px-4 py-1.5 text-sm font-medium text-slate-600 shadow-sm">
                 사람과 조직의 성장을 설계하는 교육 컨설팅 전문기업
               </div>
-              <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-tight lg:text-6xl">
+              <h1 className="max-w-3xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-6xl">
                 소통을 넘어<br />
                 조직의 변화를 만드는 교육 컨설팅 기업
               </h1>
-              <p className="mt-6 max-w-2xl text-base leading-7 text-slate-600 lg:text-lg">
+              <p className="mt-5 max-w-2xl text-[15px] leading-7 text-slate-600 lg:mt-6 lg:text-lg">
                 더소통컴퍼니는 대표강사 권혜미와 함께 조직의 변화와 성장을 설계하는 교육 컨설팅 파트너입니다. 교육문의부터 상담, 강사섭외, 운영컨설팅까지 조직의 상황에 맞게 함께합니다.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
@@ -236,7 +299,7 @@ export default function DeosotongCompanyHomepage() {
                   교육문의
                 </a>
               </div>
-              <div className="mt-10 grid gap-4 sm:grid-cols-3">
+              <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:mt-10 lg:gap-4">
                 {stats.map((stat) => (
                   <div key={stat.label} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                     <div className="text-2xl font-bold">{stat.value}</div>
@@ -247,7 +310,7 @@ export default function DeosotongCompanyHomepage() {
             </div>
 
             <div className="overflow-hidden rounded-[32px] border border-slate-200 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
-              <div className="relative h-[460px]">
+              <div className="relative h-[300px] sm:h-[360px] lg:h-[460px]">
                 <img
                   src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80"
                   alt="회의 공간에서 교육을 진행하는 비즈니스 팀"
@@ -275,16 +338,27 @@ export default function DeosotongCompanyHomepage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-6 py-12 lg:px-10">
+        <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-10 lg:py-12">
           <div className="grid gap-6">
-            <div className="rounded-[32px] border border-slate-200 bg-white px-8 py-10 shadow-sm lg:px-10 lg:py-12">
+            <div className="rounded-[28px] border border-slate-200 bg-white px-5 py-6 shadow-sm sm:px-8 sm:py-8 lg:rounded-[32px] lg:px-10 lg:py-12">
               <div className="text-sm font-semibold text-slate-500">회사소개</div>
               <h2 className="mt-3 text-3xl font-bold tracking-tight lg:text-4xl">더소통컴퍼니는 사람과 조직의 성장을 설계하는 교육컨설팅 전문기업입니다.</h2>
-              <div className="mt-6 max-w-5xl space-y-5 text-[15px] leading-8 text-slate-600 lg:text-base">
-                <p>더소통컴퍼니는 사람과 조직의 건강한 성장, 그리고 지속가능한 변화를 지원하는 교육컨설팅 전문기업입니다. 우리는 소통을 단순한 대화의 기술이 아니라, 조직의 성과와 문화, 관계의 질을 결정하는 핵심 역량으로 바라봅니다.</p>
+              <div className="mt-5 max-w-5xl space-y-4 text-[15px] leading-7 text-slate-600 lg:mt-6 lg:space-y-5 lg:text-base lg:leading-8">
+                <p>더소통컴퍼니는 사람과 조직의 건강한 성장, 그리고 지속가능한 변화를 지원하는 교육 컨설팅 전문기업입니다. 우리는 소통을 단순한 대화의 기술이 아니라, 조직의 성과와 문화, 관계의 질을 결정하는 핵심 역량으로 바라봅니다.</p>
                 <p>기업, 공공기관, 교육기관 등 다양한 현장에서 축적한 경험을 바탕으로 커뮤니케이션, 조직문화, 리더십, CS, 감정관리, 관계역량, 직무역량 강화 등 조직에 꼭 필요한 주제를 중심으로 맞춤형 교육과 컨설팅을 제공합니다.</p>
-                <p>더소통컴퍼니는 현장의 문제를 정확히 이해하고, 실질적으로 적용할 수 있는 해법을 제시하는 데 집중합니다. 단순히 좋은 내용을 전달하는 교육이 아니라, 구성원의 인식 변화와 행동 변화, 그리고 조직문화의 변화를 이끌어내는 교육을 지향합니다.</p>
-                <p>우리는 각 조직의 업종, 구성원 특성, 현장의 분위기와 과제를 반영하여 최적의 솔루션을 설계합니다. 이를 통해 조직 안에 더 나은 소통의 기준을 세우고, 신뢰와 협업이 살아 있는 건강한 문화를 함께 만들어갑니다.</p>
+                {showCompanyDetail && (
+                  <>
+                    <p>더소통컴퍼니는 현장의 문제를 정확히 이해하고, 실질적으로 적용할 수 있는 해법을 제시하는 데 집중합니다. 단순히 좋은 내용을 전달하는 교육이 아니라, 구성원의 인식 변화와 행동 변화, 그리고 조직문화의 변화를 이끌어내는 교육을 지향합니다.</p>
+                    <p>우리는 각 조직의 업종, 구성원 특성, 현장의 분위기와 과제를 반영하여 최적의 솔루션을 설계합니다. 이를 통해 조직 안에 더 나은 소통의 기준을 세우고, 신뢰와 협업이 살아 있는 건강한 문화를 함께 만들어갑니다.</p>
+                  </>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setShowCompanyDetail((prev) => !prev)}
+                  className="inline-flex rounded-full border border-slate-300 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 lg:hidden"
+                >
+                  {showCompanyDetail ? "간단히 보기" : "자세히 보기"}
+                </button>
               </div>
             </div>
 
@@ -301,25 +375,25 @@ export default function DeosotongCompanyHomepage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-6 py-4 lg:px-10">
-          <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <section className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-10">
+          <div className="grid gap-4 lg:gap-6 lg:grid-cols-[0.9fr_1.1fr]">
             <div className="overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-sm">
               <div className="grid h-full md:grid-cols-[0.85fr_1.15fr]">
-                <div className="bg-slate-100 p-6 md:p-8 flex items-center">
+                <div className="bg-slate-100 p-4 sm:p-6 md:p-8 flex items-center">
                   {repImageError ? (
-                    <div className="flex h-full min-h-[420px] w-full items-center justify-center rounded-[24px] border border-slate-200 bg-white text-center text-sm leading-6 text-slate-500">
+                    <div className="flex h-full min-h-[280px] sm:min-h-[360px] lg:min-h-[420px] w-full items-center justify-center rounded-[24px] border border-slate-200 bg-white text-center text-sm leading-6 text-slate-500">
                       대표강사 사진을 불러오지 못했습니다.
                     </div>
                   ) : (
                     <img
                       src={representativeImage}
                       alt="더소통컴퍼니 대표강사 사진"
-                      className="w-full max-h-[520px] rounded-[24px] object-cover object-top"
+                      className="w-full max-h-[360px] sm:max-h-[440px] lg:max-h-[520px] rounded-[24px] object-cover object-top"
                       onError={() => setRepImageError(true)}
                     />
                   )}
                 </div>
-                <div className="flex flex-col justify-center p-8">
+                <div className="flex flex-col justify-center p-5 sm:p-6 lg:p-8">
                   <div className="text-sm font-semibold text-slate-500">대표 인사말</div>
                   <h3 className="mt-2 text-3xl font-bold tracking-tight">대표강사와 함께하는 맞춤형 교육</h3>
                   <div className="mt-4 max-w-lg space-y-4 text-base leading-7 text-slate-600">
@@ -340,7 +414,7 @@ export default function DeosotongCompanyHomepage() {
             </div>
 
             <div className="overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-sm min-h-[360px] h-full">
-              <div className="relative h-full min-h-[360px]">
+              <div className="relative h-full min-h-[260px] sm:min-h-[320px] lg:min-h-[360px]">
                 <img
                   src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1400&q=80"
                   alt="많은 참석자가 강의를 듣고 있는 세미나 현장"
@@ -357,7 +431,7 @@ export default function DeosotongCompanyHomepage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-6 py-6 lg:px-10">
+        <section className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-10 lg:py-6">
           <div className="rounded-[32px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#fbfdff_100%)] px-8 py-10 shadow-sm">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
@@ -366,7 +440,7 @@ export default function DeosotongCompanyHomepage() {
               </div>
               <p className="max-w-md text-sm leading-6 text-slate-600">기업교육, 공공기관교육, 학교 및 복지기관 교육까지 현장에 맞는 방식으로 설계합니다.</p>
             </div>
-            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-5 grid grid-cols-2 gap-3 lg:mt-6 lg:grid-cols-4">
               {partnerGroups.map((item) => (
                 <div key={item} className="rounded-2xl border border-slate-200 bg-white px-4 py-4 text-sm font-medium text-slate-700 shadow-sm">
                   {item}
@@ -376,7 +450,7 @@ export default function DeosotongCompanyHomepage() {
           </div>
         </section>
 
-        <section id="교육프로그램" className="mx-auto max-w-7xl px-6 py-16 lg:px-10">
+        <section id="교육프로그램" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-10 lg:py-16">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="text-sm font-semibold text-slate-500">교육프로그램</div>
@@ -385,12 +459,12 @@ export default function DeosotongCompanyHomepage() {
             <p className="max-w-md text-sm leading-6 text-slate-600">핵심 카테고리를 더 쉽게 읽을 수 있도록 정리했습니다.</p>
           </div>
 
-          <div className="mt-10 grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-6 grid gap-4 lg:mt-10 lg:gap-6 lg:grid-cols-2 xl:grid-cols-3">
             {services.map((service) => {
               const meta = serviceMeta[service.title];
               const Icon = meta.icon;
               return (
-                <div key={service.title} className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+                <div key={service.title} className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md lg:rounded-[28px] lg:p-6">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
                       <div className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${meta.accent} text-white shadow-sm`}>
@@ -401,7 +475,7 @@ export default function DeosotongCompanyHomepage() {
                     <Sparkles size={18} className="mt-1 text-slate-400" />
                   </div>
                   <div className="mt-5 flex flex-wrap gap-2">
-                    {service.items.map((item) => (
+                    {service.items.slice(0, 5).map((item) => (
                       <span key={item} className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-600">{item}</span>
                     ))}
                   </div>
@@ -411,13 +485,13 @@ export default function DeosotongCompanyHomepage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-6 py-16 lg:px-10">
-          <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+                <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-10 lg:py-16">
+          <div className="grid gap-4 lg:gap-6 xl:grid-cols-[1.15fr_0.85fr]">
             <div className="space-y-6">
-              <div className="rounded-[30px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#fbfdff_100%)] p-8 shadow-sm">
+              <div className="rounded-[24px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#fbfdff_100%)] p-5 shadow-sm sm:p-6 lg:rounded-[30px] lg:p-8">
                 <div className="text-sm font-semibold text-sky-800/70">왜 더소통컴퍼니인가</div>
                 <h3 className="mt-2 text-2xl font-bold tracking-tight">현장을 이해하는 교육 컨설팅의 기준</h3>
-                <div className="mt-6 grid gap-4 md:grid-cols-2">
+                <div className="mt-5 grid gap-3 md:mt-6 md:gap-4 md:grid-cols-2">
                   {strengthMeta.map((item) => {
                     const Icon = item.icon;
                     return (
@@ -437,7 +511,7 @@ export default function DeosotongCompanyHomepage() {
             <div id="교육운영" className="rounded-[30px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#fbfdff_100%)] p-8 shadow-sm">
               <div className="text-sm font-semibold text-cyan-800/70">서비스 프로세스</div>
               <h3 className="mt-2 text-2xl font-bold tracking-tight">체계적인 단계별 과정을 통해 최고의 교육 효과를 보장합니다.</h3>
-              <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-2">
+              <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-2">
                 {processMeta.map((item) => {
                   const Icon = item.icon;
                   return (
@@ -457,8 +531,8 @@ export default function DeosotongCompanyHomepage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-6 py-4 lg:px-10">
-          <div className="grid gap-6 lg:grid-cols-2">
+        <section className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-10">
+          <div className="grid gap-4 lg:gap-6 lg:grid-cols-2">
             <div className="rounded-[32px] border border-slate-200 bg-white px-8 py-10 shadow-sm">
               <div className="text-sm font-semibold text-sky-800/70">교육 대상</div>
               <h3 className="mt-2 text-2xl font-bold tracking-tight">이런 곳에 추천합니다</h3>
@@ -480,51 +554,65 @@ export default function DeosotongCompanyHomepage() {
           </div>
         </section>
 
-        <section id="교육문의" className="mx-auto max-w-7xl px-6 py-16 lg:px-10">
-          <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
-            <div className="rounded-[30px] bg-[linear-gradient(180deg,#1e293b_0%,#0f172a_100%)] p-8 text-white shadow-sm">
+        <section id="교육문의" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-10 lg:py-16">
+          <div className="grid gap-4 lg:gap-6 lg:grid-cols-[0.92fr_1.08fr]">
+            <div className="rounded-[24px] bg-[linear-gradient(180deg,#1e293b_0%,#0f172a_100%)] p-6 text-white shadow-sm lg:rounded-[30px] lg:p-8">
               <div className="text-sm font-medium text-white/75">교육문의</div>
               <h2 className="mt-2 text-3xl font-bold tracking-tight">소통으로 변화시킬 준비가 되셨나요?</h2>
               <p className="mt-4 text-base leading-7 text-white/85">문의 주시면 상담 후 필요한 방향에 맞춰 안내해드립니다.</p>
               <div className="mt-8 space-y-3 text-sm text-white/85">
-                <div>전화번호 010-0000-0000</div>
-                <div>이메일 contact@deosotongcompany.co.kr</div>
+                <div>전화번호 010-5007-2314</div>
+                <div>이메일 konemi@naver.com</div>
                 <div>운영시간 평일 09:00 - 18:00 (주말 및 공휴일 휴무)</div>
               </div>
             </div>
 
-            <div className="rounded-[30px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#fbfdff_100%)] p-8 shadow-sm">
-              <div className="grid gap-4 sm:grid-cols-2">
+            <form onSubmit={handleSubmit} className="rounded-[30px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#fbfdff_100%)] p-8 shadow-sm">
+              <div className="mb-5 rounded-2xl border border-sky-100 bg-sky-50 px-4 py-3 text-sm leading-6 text-slate-600">
+                문의 내용을 남겨주시면 확인 후 순차적으로 연락드립니다. 접수된 내용은 등록된 이메일로 전달됩니다.
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
                 {[
-                  "기관명 / 회사명",
-                  "담당자명",
-                  "연락처",
-                  "이메일",
-                  "교육 희망 분야",
-                  "대상 인원",
-                  "희망 일정",
-                  "예산 범위",
-                ].map((label) => (
+                  ["기관명 / 회사명", "company"],
+                  ["담당자명", "manager"],
+                  ["연락처", "phone"],
+                  ["이메일", "email"],
+                  ["교육 희망 분야", "field"],
+                  ["대상 인원", "people"],
+                  ["희망 일정", "schedule"],
+                  ["예산 범위", "budget"],
+                ].map(([label, key]) => (
                   <label key={label} className="text-sm text-slate-700">
                     <div className="mb-2 font-medium">{label}</div>
-                    <input className="w-full rounded-2xl border border-slate-200 bg-[linear-gradient(180deg,#f8fbff_0%,#f8fafc_100%)] px-4 py-3 outline-none placeholder:text-slate-400 focus:border-sky-300 focus:ring-2 focus:ring-sky-100" placeholder={label} />
+                    <input
+                      value={formData[key]}
+                      onChange={(e) => handleChange(key, e.target.value)}
+                      className="w-full rounded-2xl border border-slate-200 bg-[linear-gradient(180deg,#f8fbff_0%,#f8fafc_100%)] px-4 py-3 outline-none placeholder:text-slate-400 focus:border-sky-300 focus:ring-2 focus:ring-sky-100"
+                      placeholder={label}
+                    />
                   </label>
                 ))}
                 <label className="sm:col-span-2 text-sm text-slate-700">
                   <div className="mb-2 font-medium">문의 내용</div>
-                  <textarea rows={6} className="w-full rounded-2xl border border-slate-200 bg-[linear-gradient(180deg,#f8fbff_0%,#f8fafc_100%)] px-4 py-3 outline-none placeholder:text-slate-400 focus:border-sky-300 focus:ring-2 focus:ring-sky-100" placeholder="교육 목적, 대상, 희망 방향 등을 자유롭게 남겨주세요." />
+                  <textarea
+                    rows={6}
+                    value={formData.message}
+                    onChange={(e) => handleChange("message", e.target.value)}
+                    className="w-full rounded-2xl border border-slate-200 bg-[linear-gradient(180deg,#f8fbff_0%,#f8fafc_100%)] px-4 py-3 outline-none placeholder:text-slate-400 focus:border-sky-300 focus:ring-2 focus:ring-sky-100"
+                    placeholder="교육 목적, 대상, 희망 방향 등을 자유롭게 남겨주세요."
+                  />
                 </label>
               </div>
-              <button className="mt-6 w-full rounded-full bg-[linear-gradient(135deg,#0f172a_0%,#1e3a8a_100%)] px-6 py-3 text-sm font-medium text-white shadow-sm hover:opacity-95">
+              <button type="submit" className="mt-5 w-full rounded-full bg-[linear-gradient(135deg,#0f172a_0%,#1e3a8a_100%)] px-6 py-3 text-sm font-medium text-white shadow-sm hover:opacity-95">
                 문의하기
               </button>
-            </div>
+            </form>
           </div>
         </section>
       </main>
 
       <footer className="border-t border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-8 text-sm text-slate-500 lg:flex-row lg:items-center lg:justify-between lg:px-10">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-6 text-sm text-slate-500 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-10 lg:py-8">
           <div>
             <DeosotongLogo compact />
             <div className="mt-2">사람과 조직의 성장을 설계하는 교육 컨설팅 파트너</div>
