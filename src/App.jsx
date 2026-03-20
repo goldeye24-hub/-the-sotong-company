@@ -159,7 +159,7 @@ export default function DeosotongCompanyHomepage() {
   };
   const [repImageError, setRepImageError] = useState(false);
   const [showCompanyDetail, setShowCompanyDetail] = useState(false);
-  const menu = ["HOME", "회사소개", "교육프로그램", "교육문의"];
+  const menu = ["HOME", "회사소개", "교육프로그램", "교육문의"]; // desktop only
 
   const services = [
     {
@@ -268,15 +268,22 @@ export default function DeosotongCompanyHomepage() {
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 lg:px-10 lg:py-4">
-          <DeosotongLogo compact />
-          <nav className="flex items-center gap-3 overflow-x-auto whitespace-nowrap text-[12px] font-medium text-slate-600 sm:gap-4 sm:text-sm lg:gap-8">
+          <div className="min-w-0 flex-1 lg:flex-none">
+            <DeosotongLogo compact />
+          </div>
+
+          <nav className="hidden items-center gap-3 overflow-x-auto whitespace-nowrap text-[12px] font-medium text-slate-600 sm:gap-4 sm:text-sm lg:flex lg:gap-8">
             {menu.map((item) => (
               <a key={item} href={`#${item}`} className="shrink-0 transition hover:text-slate-900">
                 {item}
               </a>
             ))}
           </nav>
-          <a href="#교육문의" className="shrink-0 rounded-full bg-slate-900 px-3 py-2 text-[11px] font-medium text-white shadow-sm hover:bg-slate-800 sm:px-4 sm:text-xs lg:px-5 lg:py-2.5 lg:text-sm">
+
+          <a
+            href="#교육문의"
+            className="shrink-0 rounded-full bg-slate-900 px-3 py-2 text-[11px] font-medium text-white shadow-sm hover:bg-slate-800 sm:px-4 sm:text-xs lg:px-5 lg:py-2.5 lg:text-sm"
+          >
             상담문의
           </a>
         </div>
@@ -343,7 +350,7 @@ export default function DeosotongCompanyHomepage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-10 lg:py-12">
+        <section id="회사소개" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-10 lg:py-12">
           <div className="grid gap-6">
             <div className="rounded-[28px] border border-slate-200 bg-white px-5 py-6 shadow-sm sm:px-8 sm:py-8 lg:rounded-[32px] lg:px-10 lg:py-12">
               <div className="text-sm font-semibold text-slate-500">회사소개</div>
