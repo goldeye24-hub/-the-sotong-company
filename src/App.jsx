@@ -22,6 +22,8 @@ import {
 
 const representativeImage = "/kwon-profile.png";
 const WEB3FORMS_ACCESS_KEY = "b9e281e2-547a-4280-8f47-96b69aa10334";
+const BLOG_URL = "https://blog.naver.com/the-sotong";
+const INSTAGRAM_URL = "https://www.instagram.com/kwon_hyemi_/";
 
 const serviceMeta = {
   조직활성화: { icon: Users, accent: "from-slate-700 to-slate-500" },
@@ -284,7 +286,10 @@ export default function DeosotongCompanyHomepage() {
                 <a href="#교육프로그램" className="rounded-full bg-slate-900 px-6 py-3 text-sm font-medium text-white shadow-sm">
                   교육프로그램
                 </a>
-                <a href="#교육문의" className="rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-medium text-slate-900 shadow-sm">
+                <a
+                  href="#교육문의"
+                  className="rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-medium text-slate-900 shadow-sm"
+                >
                   교육문의
                 </a>
               </div>
@@ -396,7 +401,7 @@ export default function DeosotongCompanyHomepage() {
                   ) : (
                     <img
                       src={representativeImage}
-                      alt="더소통컴퍼니 대표강사 사진"
+                      alt="더소통컴퍼니 대표강사 권혜미 사진"
                       className="w-full max-h-[360px] rounded-[24px] object-cover object-top sm:max-h-[440px] lg:max-h-[520px]"
                       onError={() => setRepImageError(true)}
                     />
@@ -419,6 +424,27 @@ export default function DeosotongCompanyHomepage() {
                       더소통컴퍼니는 현장 경험을 바탕으로 실효성 있는 교육과 실질적인 변화로 이어지는 컨설팅을 제공합니다.
                     </p>
                   </div>
+
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <a
+                      href={BLOG_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+                    >
+                      대표강사 블로그 바로가기
+                    </a>
+
+                    <a
+                      href={INSTAGRAM_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center rounded-full bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
+                    >
+                      대표강사 인스타그램 바로가기
+                    </a>
+                  </div>
+
                   <div className="mt-6 flex flex-wrap gap-2">
                     {["조직소통", "리더십", "관계교육", "힐링 프로그램"].map((item) => (
                       <span
@@ -436,9 +462,9 @@ export default function DeosotongCompanyHomepage() {
             <div className="h-full min-h-[360px] overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-sm">
               <div className="relative h-full min-h-[260px] sm:min-h-[320px] lg:min-h-[360px]">
                 <img
-                    src="/lecture-seminar-bg.jpg"
+                  src="/lecture-seminar-bg.jpg"
                   alt="많은 참석자가 강의를 듣고 있는 세미나 현장"
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-cover object-center"
                 />
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.04)_0%,rgba(15,23,42,0.14)_40%,rgba(15,23,42,0.48)_100%)]" />
                 <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
@@ -688,12 +714,32 @@ export default function DeosotongCompanyHomepage() {
             <DeosotongLogo compact />
             <div className="mt-2">사람과 조직의 성장을 설계하는 교육 컨설팅 파트너</div>
           </div>
+
           <div className="flex flex-wrap gap-4">
             <a href="#HOME">HOME</a>
             <a href="#회사소개">회사소개</a>
             <a href="#교육프로그램">교육프로그램</a>
             <a href="#교육운영">교육운영</a>
             <a href="#교육문의">교육문의</a>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <a
+              href={BLOG_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full border border-slate-300 bg-white px-4 py-2 text-xs font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+            >
+              대표강사 블로그
+            </a>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full bg-slate-900 px-4 py-2 text-xs font-medium text-white transition hover:bg-slate-800"
+            >
+              대표강사 인스타그램
+            </a>
           </div>
         </div>
       </footer>
