@@ -436,7 +436,7 @@ export default function DeosotongCompanyHomepage() {
             <div className="h-full min-h-[360px] overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-sm">
               <div className="relative h-full min-h-[260px] sm:min-h-[320px] lg:min-h-[360px]">
                 <img
-                  src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1400&q=80"
+                    src="/lecture-seminar-bg.jpg"
                   alt="많은 참석자가 강의를 듣고 있는 세미나 현장"
                   className="h-full w-full object-cover"
                 />
