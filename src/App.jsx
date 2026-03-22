@@ -663,27 +663,60 @@ export default function DeosotongCompanyHomepage() {
 
               <div className="grid gap-3 sm:grid-cols-2">
                 {[
-                  ["기관명 / 회사명", "company"],
-                  ["담당자명", "manager"],
-                  ["연락처", "phone"],
-                  ["이메일", "email"],
-                  ["교육 희망 분야", "field"],
-                  ["대상 인원", "people"],
-                  ["예상 강의장소", "location"],
-                  ["희망 일정", "schedule"],
-                  ["예산 최소 금액", "budget_min"],
-                  ["예산 최대 금액", "budget_max"],
-                ].map(([label, key]) => (
-                  <label key={label} className="text-sm text-slate-700">
-                    <div className="mb-2 font-medium">{label}</div>
+                  { label: "기관명 / 회사명", key: "company", placeholder: "", type: "text" },
+                  { label: "담당자명", key: "manager", placeholder: "", type: "text" },
+                  { label: "연락처", key: "phone", placeholder: "", type: "tel" },
+                  { label: "이메일", key: "email", placeholder: "예: example@naver.com", type: "email" },
+                  { label: "교육 희망 분야", key: "field", placeholder: "", type: "text" },
+                  { label: "대상 인원", key: "people", placeholder: "00명", type: "text" },
+                  { label: "예상 강의장소", key: "location", placeholder: "", type: "text" },
+                  { label: "희망 일정", key: "schedule", placeholder: "예: 2026.4.15 / 2026년 4월 중 / 협의 가능", type: "text" },
+                ].map((field) => (
+                  <label key={field.key} className="text-sm text-slate-700">
+                    <div className="mb-2 font-medium">{field.label}</div>
                     <input
-                      value={formData[key]}
-                      onChange={(e) => handleChange(key, e.target.value)}
+                      type={field.type}
+                      value={formData[field.key]}
+                      onChange={(e) => handleChange(field.key, e.target.value)}
                       className="w-full rounded-2xl border border-slate-200 bg-[linear-gradient(180deg,#f8fbff_0%,#f8fafc_100%)] px-4 py-3 outline-none placeholder:text-slate-400 focus:border-sky-300 focus:ring-2 focus:ring-sky-100"
-                      placeholder={label}
+                      placeholder={field.placeholder}
                     />
                   </label>
                 ))}
+
+                <label className="text-sm text-slate-700">
+                  <div className="mb-2 font-medium">예산 최소 금액</div>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={formData.budget_min}
+                      onChange={(e) => handleChange("budget_min", e.target.value)}
+                      className="w-full rounded-2xl border border-slate-200 bg-[linear-gradient(180deg,#f8fbff_0%,#f8fafc_100%)] px-4 py-3 pr-12 outline-none placeholder:text-slate-400 focus:border-sky-300 focus:ring-2 focus:ring-sky-100"
+                      placeholder=""
+                      inputMode="numeric"
+                    />
+                    <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-slate-400">
+                      원
+                    </span>
+                  </div>
+                </label>
+
+                <label className="text-sm text-slate-700">
+                  <div className="mb-2 font-medium">예산 최대 금액</div>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={formData.budget_max}
+                      onChange={(e) => handleChange("budget_max", e.target.value)}
+                      className="w-full rounded-2xl border border-slate-200 bg-[linear-gradient(180deg,#f8fbff_0%,#f8fafc_100%)] px-4 py-3 pr-12 outline-none placeholder:text-slate-400 focus:border-sky-300 focus:ring-2 focus:ring-sky-100"
+                      placeholder=""
+                      inputMode="numeric"
+                    />
+                    <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-slate-400">
+                      원
+                    </span>
+                  </div>
+                </label>
 
                 <label className="text-sm text-slate-700 sm:col-span-2">
                   <div className="mb-2 font-medium">문의 내용</div>
