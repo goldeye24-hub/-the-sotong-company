@@ -32,7 +32,9 @@ const serviceMeta = {
   리더십교육: { icon: Briefcase, accent: "from-indigo-800 to-indigo-600" },
   "힐링 · 스트레스교육": { icon: HeartHandshake, accent: "from-teal-800 to-teal-600" },
   법정의무교육: { icon: ShieldCheck, accent: "from-slate-800 to-slate-600" },
-  "강의컨설팅 · 강사섭외": { icon: GraduationCap, accent: "from-blue-900 to-blue-700" },
+  "CS · 민원응대교육": { icon: Headset, accent: "from-sky-700 to-blue-600" },
+  "청년취업 · 진로교육": { icon: GraduationCap, accent: "from-amber-600 to-orange-500" },
+  "강의컨설팅 · 강사섭외": { icon: Presentation, accent: "from-blue-900 to-blue-700" },
 };
 
 const processMeta = [
