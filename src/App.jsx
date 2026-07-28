@@ -614,7 +614,6 @@ const services = [
               <h2 className="mt-2 text-3xl font-bold tracking-tight">핵심 프로그램</h2>
             </div>
             <p className="max-w-md text-sm leading-6 text-slate-600">
-              핵심 카테고리를 더 쉽게 읽을 수 있도록 정리했습니다.
             </p>
           </div>
 
