@@ -30,9 +30,7 @@ const serviceMeta = {
   리더십교육: { icon: Briefcase, accent: "from-indigo-800 to-indigo-600" },
   "힐링 · 스트레스교육": { icon: HeartHandshake, accent: "from-teal-800 to-teal-600" },
   법정의무교육: { icon: ShieldCheck, accent: "from-slate-800 to-slate-600" },
-  "CS · 민원응대교육": { icon: Headset, accent: "from-sky-700 to-blue-600" },
-  "청년취업 · 진로교육": { icon: GraduationCap, accent: "from-amber-600 to-orange-500" },
-  "강의컨설팅 · 강사섭외": { icon: Presentation, accent: "from-blue-900 to-blue-700" },
+  "강의컨설팅 · 강사섭외": { icon: GraduationCap, accent: "from-blue-900 to-blue-700" },
 };
 
 const processMeta = [
@@ -139,39 +137,31 @@ export default function DeosotongCompanyHomepage() {
   const services = [
     {
       title: "조직활성화",
-      items: ["팀빌딩강의", "조직활성화교육", "협업교육", "조직문화교육", "심리적 안전감"],
+      items: ["팀빌딩", "조직문화진단", "심리적 안전감", "협업문화", "조직몰입", "조직활성화 워크숍"],
     },
     {
       title: "성격유형진단",
-      items: ["MBTI강의", "MBTI강사", "MBTI소통강사", "MBTI팀빌딩", "애니어그램교육"],
+      items: ["MBTI", "애니어그램", "관계소통", "성향이해", "강점이해", "유형별 커뮤니케이션"],
     },
     {
       title: "소통교육",
-      items: ["소통강의", "소통강사", "조직소통교육", "세대공감교육", "갈등관리교육"],
+      items: ["세대공감", "CS강의", "피드백", "부모소통", "직급별 소통", "갈등예방 대화", "고객응대 커뮤니케이션", "인성교육"],
     },
     {
       title: "리더십교육",
-      items: ["리더십교육", "팀장리더십교육", "중간관리자교육", "코칭형리더십", "갑질예방교육"],
+      items: ["팀장 리더십", "코칭형 리더십", "성과대화", "중간관리자 리더십", "공감 리더십", "팔로우십", "변화관리"],
     },
     {
       title: "힐링 · 스트레스교육",
-      items: ["스트레스관리교육", "감정관리교육", "감정노동교육", "번아웃예방교육", "회복탄력성교육"],
+      items: ["스트레스관리", "감정관리", "싱잉볼 명상", "번아웃 예방", "회복탄력성", "마음돌봄", "이완과 호흡"],
     },
     {
       title: "법정의무교육",
-      items: ["직장내괴롭힘예방교육", "성희롱예방교육", "장애인식개선교육", "개인정보보호교육", "인권교육"],
-    },
-    {
-      title: "CS · 민원응대교육",
-      items: ["CS강의", "CS교육", "민원응대교육", "고객응대교육", "악성민원대응교육"],
-    },
-    {
-      title: "청년취업 · 진로교육",
-      items: ["청년취업교육", "취업특강", "진로탐색교육", "강점찾기교육", "면접이미지메이킹"],
+      items: ["장애인 인식개선", "개인정보보호", "성희롱예방", "직장 내 괴롭힘 예방", "퇴직연금교육", "기관 맞춤 의무교육", "인권교육"],
     },
     {
       title: "강의컨설팅 · 강사섭외",
-      items: ["기업교육컨설팅", "공공기관강사섭외", "교육기획", "맞춤형워크숍", "강사파견"],
+      items: ["교육기획", "강사섭외", "운영컨설팅", "프로그램 설계", "맞춤형 워크숍", "연간 교육운영", "강사 파견 운영"],
     },
   ];
 
@@ -446,7 +436,7 @@ export default function DeosotongCompanyHomepage() {
             <div className="h-full min-h-[360px] overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-sm">
               <div className="relative h-full min-h-[260px] sm:min-h-[320px] lg:min-h-[360px]">
                 <img
-                  src="/lecture-seminar-bg.jpg"
+                    src="/lecture-seminar-bg.jpg"
                   alt="많은 참석자가 강의를 듣고 있는 세미나 현장"
                   className="h-full w-full object-cover"
                 />
