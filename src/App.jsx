@@ -149,7 +149,6 @@ export default function DeosotongCompanyHomepage() {
   },
   ...
 ];
-여기에서 기존 services 전체를 아래 코드로 교체하세요.
 
 const services = [
   {
