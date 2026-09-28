@@ -133,7 +133,6 @@ export default function DeosotongCompanyHomepage() {
 
   const [repImageError, setRepImageError] = useState(false);
   const [showCompanyDetail, setShowCompanyDetail] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const menu = ["HOME", "회사소개", "교육프로그램", "교육문의"];
 
@@ -194,9 +193,6 @@ export default function DeosotongCompanyHomepage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (isSubmitting) return;
-    setIsSubmitting(true);
-
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
@@ -224,9 +220,7 @@ export default function DeosotongCompanyHomepage() {
       });
 
       const result = await response.json();
-      if (!response.ok || !result.success) {
-        throw new Error(result.message || "문의 전송 실패");
-      }
+      if (!result.success) throw new Error("문의 전송 실패");
 
       alert("문의가 정상 접수되었습니다.");
       setFormData({
@@ -243,10 +237,7 @@ export default function DeosotongCompanyHomepage() {
         message: "",
       });
     } catch (error) {
-      console.error("문의 접수 오류:", error);
       alert("문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -360,7 +351,8 @@ export default function DeosotongCompanyHomepage() {
                   관계역량, 직무역량 강화 등 조직에 꼭 필요한 주제를 중심으로 맞춤형 교육과 컨설팅을 제공합니다.
                 </p>
 
-                <div className={`${showCompanyDetail ? "block" : "hidden"} space-y-4 lg:block lg:space-y-5`}>
+                {showCompanyDetail && (
+                  <>
                     <p>
                       더소통컴퍼니는 현장의 문제를 정확히 이해하고, 실질적으로 적용할 수 있는 해법을 제시하는 데 집중합니다.
                       단순히 좋은 내용을 전달하는 교육이 아니라, 구성원의 인식 변화와 행동 변화, 그리고 조직문화의 변화를 이끌어내는 교육을 지향합니다.
@@ -369,7 +361,8 @@ export default function DeosotongCompanyHomepage() {
                       우리는 각 조직의 업종, 구성원 특성, 현장의 분위기와 과제를 반영하여 최적의 솔루션을 설계합니다.
                       이를 통해 조직 안에 더 나은 소통의 기준을 세우고, 신뢰와 협업이 살아 있는 건강한 문화를 함께 만들어갑니다.
                     </p>
-                </div>
+                  </>
+                )}
 
                 <button
                   type="button"
@@ -739,10 +732,9 @@ export default function DeosotongCompanyHomepage() {
 
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="mt-5 w-full rounded-full bg-[linear-gradient(135deg,#0f172a_0%,#1e3a8a_100%)] px-6 py-3 text-sm font-medium text-white shadow-sm hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
+                className="mt-5 w-full rounded-full bg-[linear-gradient(135deg,#0f172a_0%,#1e3a8a_100%)] px-6 py-3 text-sm font-medium text-white shadow-sm hover:opacity-95"
               >
-                {isSubmitting ? "접수 중..." : "문의하기"}
+                문의하기
               </button>
             </form>
           </div>
