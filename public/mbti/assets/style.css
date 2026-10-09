@@ -53,7 +53,7 @@ nav a:hover{color:var(--blue)}
 .hero-visual{position:relative;min-height:560px}
 .hero-photo{position:absolute;left:0;bottom:-20px;width:62%;height:94%;overflow:hidden;border-radius:42% 42% 0 0;background:linear-gradient(180deg,#eaf5ff,#fff)}
 .hero-photo img{width:100%;height:100%;object-fit:contain;object-position:center bottom}
-.quote-bubble{position:absolute;left:4%;top:19%;z-index:3;padding:14px 18px;border-radius:18px;background:rgba(255,255,255,.88);box-shadow:var(--shadow);font-size:15px;font-weight:750;line-height:1.5;transform:rotate(-3deg)}
+
 .mbti-grid{position:absolute;right:0;top:46px;display:grid;grid-template-columns:1fr 1fr;gap:12px;width:42%}
 .mbti-box{aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:26px;box-shadow:0 12px 30px rgba(39,72,117,.08);text-align:center}
 .mbti-box b{font-size:42px;line-height:1}.mbti-box span{margin-top:7px;font-size:11px;font-weight:900}.mbti-box small{margin-top:4px;font-size:10px}.box-m{background:#ffddea;color:#a33c70}.box-b{background:#dbf1ff;color:#2771b5}.box-t{background:#fff0c8;color:#a56700}.box-i{background:#daf4e6;color:#1c8c64}
@@ -151,7 +151,7 @@ footer strong,footer small{display:block}footer strong{color:#182b49;font-size:1
 @media(max-width:760px){
   .site-header{padding:0 18px;min-height:68px}.header-phone{display:none}.header-cta{padding:9px 12px;font-size:11px}
   .hero{padding:24px 20px 42px}.hero h1{font-size:3rem}.hero-lead{font-size:15px}.hero-actions{flex-direction:column}.button{width:100%}
-  .hero-visual{min-height:480px}.hero-photo{width:68%}.mbti-grid{width:46%;top:38px}.mbti-box b{font-size:30px}.quote-bubble{font-size:12px}
+  .hero-visual{min-height:480px}.hero-photo{width:68%}.mbti-grid{width:46%;top:38px}.mbti-box b{font-size:30px}
   .feature-strip{margin:0;border-radius:0;grid-template-columns:1fr}
   .section{padding:70px 20px}.section-title{grid-template-columns:1fr;gap:16px}
   .benefit-grid,.program-grid,.audience-row,.instructor,.faq,.inquiry{grid-template-columns:1fr}
