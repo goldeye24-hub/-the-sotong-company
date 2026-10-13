@@ -204,21 +204,14 @@
       </div>
     </aside>
 
-    <form class="inquiry-form" data-inquiry-form data-preset="MBTI 성향진단 교육">
+    <form class="inquiry-form" data-inquiry-form data-preset="MBTI 교육">
       <div class="form-note">문의 내용을 남겨주시면 확인 후 순차적으로 연락드립니다. 접수 내용은 등록된 이메일로 전달됩니다.</div>
       <div class="form-grid">
         <label><span>기관명 / 회사명 <b>*</b></span><input name="company" required autocomplete="organization"></label>
         <label><span>담당자명 <b>*</b></span><input name="manager" required autocomplete="name"></label>
         <label><span>연락처 <b>*</b></span><input type="tel" name="phone" required autocomplete="tel"></label>
         <label><span>이메일 <b>*</b></span><input type="email" name="email" required autocomplete="email"></label>
-        <label><span>교육 희망 분야 <b>*</b></span>
-          <select name="education_field" required>
-            <option value="MBTI 성향진단 교육">MBTI 성향진단 교육</option>
-            <option value="MBTI 팀빌딩·조직활성화">MBTI 팀빌딩·조직활성화</option>
-            <option value="MBTI 리더십·관리자">MBTI 리더십·관리자</option>
-            <option value="MBTI 성향진단·진로상담">MBTI 성향진단·진로상담</option>
-          </select>
-        </label>
+        <input type="hidden" name="education_field" value="MBTI 교육">
         <label><span>대상 인원</span><input name="people" placeholder="예: 30명"></label>
         <label><span>예상 강의장소</span><input name="location" placeholder="예: 서울 / 부산 / 온라인"></label>
         <label><span>희망 일정</span><input name="schedule" placeholder="예: 2026년 11월 중 / 협의 가능"></label>
