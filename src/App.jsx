@@ -279,7 +279,7 @@ export default function DeosotongCompanyHomepage() {
                 조직의 변화를 만드는 교육 컨설팅 기업
               </h1>
               <p className="mt-5 max-w-2xl text-[15px] leading-7 text-slate-600 lg:mt-6 lg:text-lg">
-                더소통컴퍼니는 대표강사 권혜미와 함께 조직의 변화와 성장을 설계하는 교육 컨설팅 파트너입니다.
+                더소통컴퍼니는 대표강사 권혜미 박사와 함께 조직의 변화와 성장을 설계하는 교육 컨설팅 파트너입니다.
                 교육문의부터 상담, 강사섭외, 운영컨설팅까지 조직의 상황에 맞게 함께합니다.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
