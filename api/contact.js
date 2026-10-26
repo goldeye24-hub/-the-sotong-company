@@ -50,6 +50,7 @@ export default async function handler(request, response) {
 
   if (request.method === 'GET') {
     response.setHeader('Cache-Control', 'no-store');
+    response.setHeader('X-Robots-Tag', 'noindex, nofollow');
     return response.status(200).json({
       success: true,
       formKey: accessKey,

@@ -218,6 +218,7 @@ export default function DeosotongCompanyHomepage() {
           phone: formData.phone,
           email: formData.email,
           field: formData.field,
+          education_field: formData.field,
           people: formData.people,
           location: formData.location,
           schedule_first: formData.schedule_first,
@@ -229,6 +230,8 @@ export default function DeosotongCompanyHomepage() {
           budget_min: formData.budget_min,
           budget_max: formData.budget_max,
           message: formData.message,
+          privacy_consent: "동의",
+          page_source: window.location.pathname,
         }),
       });
 
