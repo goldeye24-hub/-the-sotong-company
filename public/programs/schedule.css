@@ -1,0 +1,57 @@
+.schedule-group {
+  grid-column: 1 / -1;
+  margin: 0;
+  border: 1px solid #dbe4ee;
+  border-radius: 18px;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  background: #fff;
+}
+
+.schedule-group legend {
+  padding: 0 6px;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.schedule-group small {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.schedule-group .schedule-flexible {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.schedule-group .schedule-flexible input {
+  width: 17px;
+  min-height: 17px;
+  margin: 0;
+}
+
+.schedule-group > p {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #94a3b8;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+@media (max-width: 540px) {
+  .schedule-group {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-group .schedule-flexible,
+  .schedule-group > p {
+    grid-column: auto;
+  }
+}

@@ -21,7 +21,6 @@ import {
 } from "lucide-react";
 
 const representativeImage = "/kwon-profile.png";
-const WEB3FORMS_ACCESS_KEY = "b9e281e2-547a-4280-8f47-96b69aa10334";
 const BLOG_URL = "https://blog.naver.com/the-sotong";
 const INSTAGRAM_URL = "https://www.instagram.com/kwon_hyemi_/";
 
@@ -125,7 +124,9 @@ export default function DeosotongCompanyHomepage() {
     field: "",
     people: "",
     location: "",
-    schedule: "",
+    schedule_first: "",
+    schedule_second: "",
+    schedule_flexible: false,
     budget_min: "",
     budget_max: "",
     message: "",
@@ -194,14 +195,13 @@ export default function DeosotongCompanyHomepage() {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         body: JSON.stringify({
-          access_key: WEB3FORMS_ACCESS_KEY,
           subject: `[더소통컴퍼니 교육문의] ${formData.company || formData.manager || "홈페이지 문의"}`,
           from_name: "더소통컴퍼니 홈페이지",
           replyto: formData.email,
@@ -212,7 +212,12 @@ export default function DeosotongCompanyHomepage() {
           field: formData.field,
           people: formData.people,
           location: formData.location,
-          schedule: formData.schedule,
+          schedule_first: formData.schedule_first,
+          schedule_second: formData.schedule_second || "미입력",
+          schedule_flexible: formData.schedule_flexible ? "협의 가능" : "해당 없음",
+          schedule: formData.schedule_flexible
+            ? `1순위 ${formData.schedule_first || "미정"} / 2순위 ${formData.schedule_second || "미정"} / 일정 협의 가능`
+            : `1순위 ${formData.schedule_first} / 2순위 ${formData.schedule_second || "미입력"}`,
           budget_min: formData.budget_min,
           budget_max: formData.budget_max,
           message: formData.message,
@@ -231,7 +236,9 @@ export default function DeosotongCompanyHomepage() {
         field: "",
         people: "",
         location: "",
-        schedule: "",
+        schedule_first: "",
+        schedule_second: "",
+        schedule_flexible: false,
         budget_min: "",
         budget_max: "",
         message: "",
@@ -663,14 +670,13 @@ export default function DeosotongCompanyHomepage() {
 
               <div className="grid gap-3 sm:grid-cols-2">
                 {[
-                  { label: "기관명 / 회사명", key: "company", placeholder: "", type: "text" },
-                  { label: "담당자명", key: "manager", placeholder: "", type: "text" },
-                  { label: "연락처", key: "phone", placeholder: "", type: "tel" },
-                  { label: "이메일", key: "email", placeholder: "예: example@naver.com", type: "email" },
+                  { label: "기관명 / 회사명", key: "company", placeholder: "", type: "text", required: true },
+                  { label: "담당자명", key: "manager", placeholder: "", type: "text", required: true },
+                  { label: "연락처", key: "phone", placeholder: "", type: "tel", required: true },
+                  { label: "이메일", key: "email", placeholder: "예: example@naver.com", type: "email", required: true },
                   { label: "교육 희망 분야", key: "field", placeholder: "", type: "text" },
                   { label: "대상 인원", key: "people", placeholder: "00명", type: "text" },
                   { label: "예상 강의장소", key: "location", placeholder: "", type: "text" },
-                  { label: "희망 일정", key: "schedule", placeholder: "예: 2026.4.15 / 2026년 4월 중 / 협의 가능", type: "text" },
                 ].map((field) => (
                   <label key={field.key} className="text-sm text-slate-700">
                     <div className="mb-2 font-medium">{field.label}</div>
@@ -678,11 +684,51 @@ export default function DeosotongCompanyHomepage() {
                       type={field.type}
                       value={formData[field.key]}
                       onChange={(e) => handleChange(field.key, e.target.value)}
+                      required={field.required}
                       className="w-full rounded-2xl border border-slate-200 bg-[linear-gradient(180deg,#f8fbff_0%,#f8fafc_100%)] px-4 py-3 outline-none placeholder:text-slate-400 focus:border-sky-300 focus:ring-2 focus:ring-sky-100"
                       placeholder={field.placeholder}
                     />
                   </label>
                 ))}
+
+                <fieldset className="rounded-2xl border border-slate-200 p-4 sm:col-span-2">
+                  <legend className="px-1 text-sm font-medium text-slate-700">희망 일정</legend>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <label className="text-sm text-slate-700">
+                      <div className="mb-2 font-medium">1순위 날짜</div>
+                      <input
+                        type="date"
+                        value={formData.schedule_first}
+                        onChange={(e) => handleChange("schedule_first", e.target.value)}
+                        required={!formData.schedule_flexible}
+                        aria-describedby="schedule-help"
+                        className="w-full rounded-2xl border border-slate-200 bg-[linear-gradient(180deg,#f8fbff_0%,#f8fafc_100%)] px-4 py-3 outline-none focus:border-sky-300 focus:ring-2 focus:ring-sky-100"
+                      />
+                    </label>
+                    <label className="text-sm text-slate-700">
+                      <div className="mb-2 font-medium">2순위 날짜 <span className="font-normal text-slate-400">(선택)</span></div>
+                      <input
+                        type="date"
+                        value={formData.schedule_second}
+                        min={formData.schedule_first || undefined}
+                        onChange={(e) => handleChange("schedule_second", e.target.value)}
+                        className="w-full rounded-2xl border border-slate-200 bg-[linear-gradient(180deg,#f8fbff_0%,#f8fafc_100%)] px-4 py-3 outline-none focus:border-sky-300 focus:ring-2 focus:ring-sky-100"
+                      />
+                    </label>
+                  </div>
+                  <label className="mt-3 flex cursor-pointer items-center gap-2 text-sm text-slate-700">
+                    <input
+                      type="checkbox"
+                      checked={formData.schedule_flexible}
+                      onChange={(e) => handleChange("schedule_flexible", e.target.checked)}
+                      className="h-4 w-4 rounded border-slate-300 text-blue-700 focus:ring-blue-200"
+                    />
+                    일정 협의 가능
+                  </label>
+                  <p id="schedule-help" className="mt-2 text-xs leading-5 text-slate-400">
+                    1순위는 필수이며, 일정 협의 가능을 선택하면 날짜 없이도 문의할 수 있습니다.
+                  </p>
+                </fieldset>
 
                 <label className="text-sm text-slate-700">
                   <div className="mb-2 font-medium">예산 최소 금액</div>
@@ -722,6 +768,7 @@ export default function DeosotongCompanyHomepage() {
                   <div className="mb-2 font-medium">문의 내용</div>
                   <textarea
                     rows={6}
+                    required
                     value={formData.message}
                     onChange={(e) => handleChange("message", e.target.value)}
                     className="w-full rounded-2xl border border-slate-200 bg-[linear-gradient(180deg,#f8fbff_0%,#f8fafc_100%)] px-4 py-3 outline-none placeholder:text-slate-400 focus:border-sky-300 focus:ring-2 focus:ring-sky-100"
@@ -729,6 +776,11 @@ export default function DeosotongCompanyHomepage() {
                   />
                 </label>
               </div>
+
+              <label className="mt-4 flex items-start gap-2 text-xs leading-5 text-slate-500">
+                <input type="checkbox" required className="mt-0.5 h-4 w-4 rounded border-slate-300 text-blue-700 focus:ring-blue-200" />
+                <span>개인정보 수집 및 이용에 동의합니다. 입력 정보는 교육 상담과 회신 목적으로만 사용합니다.</span>
+              </label>
 
               <button
                 type="submit"

@@ -9,7 +9,7 @@
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
   <link rel="canonical" href="https://www.thesotong.com/mbti/">
   <link rel="icon" href="/favicon.svg">
-  <link rel="stylesheet" href="/mbti/assets/style.css">
+  <link rel="stylesheet" href="/mbti/assets/style.css"><link rel="stylesheet" href="/programs/schedule.css">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="더소통컴퍼니">
   <meta property="og:title" content="MBTI 강사 권혜미 | MBTI 강의·검사·교육">
@@ -214,7 +214,7 @@
         <input type="hidden" name="education_field" value="MBTI 교육">
         <label><span>대상 인원</span><input name="people" placeholder="예: 30명"></label>
         <label><span>예상 강의장소</span><input name="location" placeholder="예: 서울 / 부산 / 온라인"></label>
-        <label><span>희망 일정</span><input name="schedule" placeholder="예: 2026년 11월 중 / 협의 가능"></label>
+        <fieldset class="schedule-group form-wide"><legend>희망 일정</legend><label><span>1순위 날짜</span><input type="date" name="schedule_first"></label><label><span>2순위 날짜 <small>(선택)</small></span><input type="date" name="schedule_second"></label><label class="schedule-flexible"><input type="checkbox" name="schedule_flexible" value="협의 가능"><span>일정 협의 가능</span></label><p>1순위는 필수이며, 일정 협의 가능을 선택하면 날짜 없이도 문의할 수 있습니다.</p></fieldset>
         <label><span>예산 최소 금액</span><div class="input-unit"><input name="budget_min" inputmode="numeric" placeholder="예: 1,000,000"><i>원</i></div></label>
         <label><span>예산 최대 금액</span><div class="input-unit"><input name="budget_max" inputmode="numeric" placeholder="예: 3,000,000"><i>원</i></div></label>
         <label class="form-wide message-field"><span>문의 내용 <b>*</b></span><textarea name="message" rows="8" required placeholder="교육 목적, 대상, 희망 방향, 궁금한 점 등을 자유롭게 남겨주세요."></textarea></label>
