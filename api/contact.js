@@ -42,15 +42,23 @@ async function deliver(payload) {
 }
 
 export default async function handler(request, response) {
-  if (request.method !== 'POST') {
-    response.setHeader('Allow', 'POST');
-    return response.status(405).json({ success: false, message: 'Method not allowed' });
-  }
-
   const accessKey = process.env.WEB3FORMS_ACCESS_KEY;
   if (!accessKey) {
     console.error('WEB3FORMS_ACCESS_KEY is not configured');
     return response.status(500).json({ success: false, message: '문의 전송 설정 오류' });
+  }
+
+  if (request.method === 'GET') {
+    response.setHeader('Cache-Control', 'no-store');
+    return response.status(200).json({
+      success: true,
+      formKey: accessKey,
+    });
+  }
+
+  if (request.method !== 'POST') {
+    response.setHeader('Allow', 'GET, POST');
+    return response.status(405).json({ success: false, message: 'Method not allowed' });
   }
 
   const body = request.body || {};

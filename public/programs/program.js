@@ -33,10 +33,18 @@ document.addEventListener('DOMContentLoaded', () => {
         : `1순위 ${data.schedule_first} / 2순위 ${data.schedule_second}`;
 
       try {
-        const response = await fetch('/api/contact', {
+        const configResponse = await fetch('/api/contact', {
+          headers: { Accept: 'application/json' },
+          cache: 'no-store',
+        });
+        const config = await configResponse.json();
+        if (!configResponse.ok || !config.formKey) throw new Error('문의 전송 설정 오류');
+
+        const response = await fetch('https://api.web3forms.com/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify({
+            access_key: config.formKey,
             subject: `[더소통컴퍼니 ${data.education_field || '교육'} 문의] ${data.company || data.manager || '홈페이지 문의'}`,
             from_name: '더소통컴퍼니 홈페이지',
             replyto: data.email,
