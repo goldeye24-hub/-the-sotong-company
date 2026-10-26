@@ -1,7 +1,44 @@
 const MAX_FIELD_LENGTH = 4000;
+const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
+const MAX_DELIVERY_ATTEMPTS = 2;
 
 function clean(value) {
   return typeof value === 'string' ? value.trim().slice(0, MAX_FIELD_LENGTH) : '';
+}
+
+async function deliver(payload) {
+  const upstream = await fetch(WEB3FORMS_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Origin: 'https://www.thesotong.com',
+      Referer: 'https://www.thesotong.com/',
+    },
+    body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(35_000),
+  });
+
+  const contentType = upstream.headers.get('content-type') || '';
+  const raw = await upstream.text();
+  let result = null;
+
+  try {
+    result = JSON.parse(raw);
+  } catch {
+    console.error('Web3Forms returned a non-JSON response', {
+      status: upstream.status,
+      contentType,
+      responseBytes: raw.length,
+    });
+  }
+
+  return {
+    success: upstream.ok && result?.success === true,
+    retryable: !upstream.ok && (upstream.status === 408 || upstream.status === 429 || upstream.status >= 500),
+    status: upstream.status,
+    message: result?.message || '',
+  };
 }
 
 export default async function handler(request, response) {
@@ -51,19 +88,24 @@ export default async function handler(request, response) {
   };
 
   try {
-    const upstream = await fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    const result = await upstream.json();
-    if (!upstream.ok || !result.success) {
-      console.error('Web3Forms error', result.message || upstream.status);
+    let delivery;
+
+    for (let attempt = 1; attempt <= MAX_DELIVERY_ATTEMPTS; attempt += 1) {
+      delivery = await deliver(payload);
+      if (delivery.success || !delivery.retryable) break;
+    }
+
+    if (!delivery?.success) {
+      console.error('Web3Forms delivery failed', {
+        status: delivery?.status,
+        message: delivery?.message,
+      });
       return response.status(502).json({ success: false, message: '문의 전송 실패' });
     }
+
     return response.status(200).json({ success: true });
   } catch (error) {
-    console.error('Contact API error', error);
+    console.error('Contact API error', error instanceof Error ? error.message : error);
     return response.status(502).json({ success: false, message: '문의 전송 실패' });
   }
 }
