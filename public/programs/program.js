@@ -1,3 +1,28 @@
+// Show the familiar brief confirmation at the top without leaving the current page.
+let inquiryToastTimer;
+function showInquiryToast(message) {
+  let toast = document.getElementById('sotong-inquiry-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'sotong-inquiry-toast';
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-live', 'polite');
+    toast.style.cssText = [
+      'position:fixed', 'top:20px', 'left:50%', 'transform:translateX(-50%)',
+      'z-index:99999', 'box-sizing:border-box', 'max-width:calc(100vw - 32px)',
+      'padding:12px 20px', 'border:1px solid #a7f3d0', 'border-radius:12px',
+      'background:white', 'box-shadow:0 12px 40px rgba(15,23,42,.18)',
+      'font:600 14px/1.5 system-ui,-apple-system,Arial,sans-serif',
+      'color:#1e293b', 'text-align:center'
+    ].join(';');
+    document.body.appendChild(toast);
+  }
+  clearTimeout(inquiryToastTimer);
+  toast.textContent = '✓  ' + message;
+  toast.hidden = false;
+  inquiryToastTimer = setTimeout(() => { toast.hidden = true; }, 4500);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-inquiry-form]').forEach((form) => {
     const firstDate = form.querySelector('[name="schedule_first"]');
@@ -78,7 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
           if (field) field.value = preset;
         }
         syncScheduleRules();
-        setStatus('문의가 접수되었습니다. 확인 후 연락드리겠습니다.', 'success');
+        setStatus('', 'success');
+        showInquiryToast('문의가 접수되었습니다. 확인 후 연락드리겠습니다.');
       } catch (error) {
         console.error('Inquiry confirmation failed', error instanceof Error ? error.message : error);
         const { inquiryErrorMessage } = await import('/programs/contact-delivery.js');
