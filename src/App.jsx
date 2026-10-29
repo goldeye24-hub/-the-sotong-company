@@ -1,4 +1,4 @@
-import { submitInquiry, inquiryErrorMessage } from "./contact-delivery.js";
+import { submitInquiry, inquiryErrorMessage, openDeliveryWindow } from "./contact-delivery.js";
 import { useState } from "react";
 import {
   Briefcase,
@@ -199,6 +199,7 @@ export default function DeosotongCompanyHomepage() {
 
     const button = e.currentTarget.querySelector('button[type="submit"]');
     if (button.disabled) return;
+    const deliveryWindow = openDeliveryWindow();
     button.disabled = true;
     button.textContent = "접수 중...";
     try {
@@ -241,7 +242,7 @@ export default function DeosotongCompanyHomepage() {
       payload.set("access_key", config.formKey);
       Object.entries(data).forEach(([key, value]) => payload.set(key, value));
 
-      await submitInquiry(payload);
+      await submitInquiry(payload, deliveryWindow);
 
       alert("문의가 정상 접수되었습니다.");
       setFormData({
@@ -262,6 +263,7 @@ export default function DeosotongCompanyHomepage() {
         message: "",
       });
     } catch (error) {
+      if (deliveryWindow && !deliveryWindow.closed) deliveryWindow.close();
       console.error("Contact submission failed", error instanceof Error ? error.message : error);
       alert(inquiryErrorMessage(error));
     } finally {

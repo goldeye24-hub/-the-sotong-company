@@ -1,4 +1,5 @@
-import('/programs/contact-delivery.js');
+let contactModule;
+const contactReady = import('/programs/contact-delivery.js').then((module) => { contactModule = module; });
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-inquiry-form]').forEach((form) => {
     const firstDate = form.querySelector('[name="schedule_first"]');
@@ -21,6 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const button = form.querySelector('button[type="submit"]');
       const original = button.textContent;
+      if (!contactModule) { await contactReady; }
+      const deliveryWindow = contactModule.openDeliveryWindow();
       button.disabled = true;
       button.textContent = '접수 중...';
 
@@ -58,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         payload.set('lecture_time_window', data.lecture_time_window || '미입력');
 
         const { submitInquiry } = await import('/programs/contact-delivery.js');
-        await submitInquiry(payload);
+        await submitInquiry(payload, deliveryWindow);
         alert('문의가 정상 접수되었습니다.');
         form.reset();
         const preset = form.dataset.preset;
@@ -68,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         syncScheduleRules();
       } catch (error) {
+        if (deliveryWindow && !deliveryWindow.closed) deliveryWindow.close();
         console.error(error);
         const { inquiryErrorMessage } = await import('/programs/contact-delivery.js');
         alert(inquiryErrorMessage(error));

@@ -1,6 +1,7 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1"><title>문의 접수 완료 | 더소통컴퍼니</title></head><body><p>문의가 접수되었습니다. 확인 후 연락드리겠습니다.</p><a href="/">홈페이지로 돌아가기</a><script>
 const receipt = new URL(location.href).searchParams.get('receipt');
-if (window.parent !== window && /^[a-f0-9-]{36}$/.test(receipt || '')) {
-  window.parent.postMessage({ type: 'contact-received', receipt }, location.origin);
+const receiver = window.opener || (window.parent !== window ? window.parent : null);
+if (receiver && /^[a-f0-9-]{36}$/.test(receipt || '')) {
+  receiver.postMessage({ type: 'contact-received', receipt }, location.origin);
 }
 </script></body></html>
