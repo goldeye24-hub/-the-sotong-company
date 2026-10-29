@@ -1,4 +1,3 @@
-import { submitInquiry, inquiryErrorMessage, openDeliveryWindow } from "./contact-delivery.js";
 import { useState } from "react";
 import {
   Briefcase,
@@ -197,11 +196,6 @@ export default function DeosotongCompanyHomepage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const button = e.currentTarget.querySelector('button[type="submit"]');
-    if (button.disabled) return;
-    const deliveryWindow = openDeliveryWindow();
-    button.disabled = true;
-    button.textContent = "접수 중...";
     try {
       const configResponse = await fetch("/api/contact", {
         headers: { Accept: "application/json" },
@@ -210,39 +204,43 @@ export default function DeosotongCompanyHomepage() {
       const config = await configResponse.json();
       if (!configResponse.ok || !config.formKey) throw new Error("문의 전송 설정 오류");
 
-      const data = {
-        subject: `[더소통컴퍼니 교육문의] ${formData.company || formData.manager || "홈페이지 문의"}`,
-        from_name: "더소통컴퍼니 홈페이지",
-        replyto: formData.email,
-        name: formData.manager || formData.company || "교육 문의",
-        company: formData.company,
-        manager: formData.manager,
-        phone: formData.phone,
-        email: formData.email,
-        field: formData.field,
-        education_field: formData.field,
-        people: formData.people,
-        location: formData.location,
-        schedule_first: formData.schedule_first || "미정",
-        schedule_second: formData.schedule_second || "미입력",
-        schedule_flexible: formData.schedule_flexible ? "협의 가능" : "해당 없음",
-        lecture_duration: formData.lecture_duration,
-        lecture_time_window: formData.lecture_time_window,
-        schedule: formData.schedule_flexible
-          ? `1순위 ${formData.schedule_first || "미정"} / 2순위 ${formData.schedule_second || "미정"} / 일정 협의 가능`
-          : `1순위 ${formData.schedule_first} / 2순위 ${formData.schedule_second || "미입력"}`,
-        budget_min: formData.budget_min,
-        budget_max: formData.budget_max,
-        message: formData.message,
-        privacy_consent: "동의",
-        page_source: window.location.pathname,
-      };
-      // Native multipart body avoids a JSON CORS preflight with Web3Forms.
-      const payload = new FormData();
-      payload.set("access_key", config.formKey);
-      Object.entries(data).forEach(([key, value]) => payload.set(key, value));
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: config.formKey,
+          subject: `[더소통컴퍼니 교육문의] ${formData.company || formData.manager || "홈페이지 문의"}`,
+          from_name: "더소통컴퍼니 홈페이지",
+          replyto: formData.email,
+          company: formData.company,
+          manager: formData.manager,
+          phone: formData.phone,
+          email: formData.email,
+          field: formData.field,
+          education_field: formData.field,
+          people: formData.people,
+          location: formData.location,
+          schedule_first: formData.schedule_first,
+          schedule_second: formData.schedule_second || "미입력",
+          schedule_flexible: formData.schedule_flexible ? "협의 가능" : "해당 없음",
+          lecture_duration: formData.lecture_duration,
+          lecture_time_window: formData.lecture_time_window,
+          schedule: formData.schedule_flexible
+            ? `1순위 ${formData.schedule_first || "미정"} / 2순위 ${formData.schedule_second || "미정"} / 일정 협의 가능`
+            : `1순위 ${formData.schedule_first} / 2순위 ${formData.schedule_second || "미입력"}`,
+          budget_min: formData.budget_min,
+          budget_max: formData.budget_max,
+          message: formData.message,
+          privacy_consent: "동의",
+          page_source: window.location.pathname,
+        }),
+      });
 
-      await submitInquiry(payload, deliveryWindow);
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.message || "문의 전송 실패");
 
       alert("문의가 정상 접수되었습니다.");
       setFormData({
@@ -263,12 +261,7 @@ export default function DeosotongCompanyHomepage() {
         message: "",
       });
     } catch (error) {
-      if (deliveryWindow && !deliveryWindow.closed) deliveryWindow.close();
-      console.error("Contact submission failed", error instanceof Error ? error.message : error);
-      alert(inquiryErrorMessage(error));
-    } finally {
-      button.disabled = false;
-      button.textContent = "문의하기";
+      alert("문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
     }
   };
 
