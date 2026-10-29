@@ -1,5 +1,3 @@
-let contactModule;
-const contactReady = import('/programs/contact-delivery.js').then((module) => { contactModule = module; });
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-inquiry-form]').forEach((form) => {
     const firstDate = form.querySelector('[name="schedule_first"]');
@@ -22,8 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const button = form.querySelector('button[type="submit"]');
       const original = button.textContent;
-      if (!contactModule) { await contactReady; }
-      const deliveryWindow = contactModule.openDeliveryWindow();
       button.disabled = true;
       button.textContent = '접수 중...';
 
@@ -44,24 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const config = await configResponse.json();
         if (!configResponse.ok || !config.formKey) throw new Error('문의 전송 설정 오류');
 
-        // Web3Forms free forms accept browser submissions. FormData avoids a JSON
-        // CORS preflight; do not proxy submission via a Vercel server function.
-        const payload = new FormData(form);
-        payload.set('access_key', config.formKey);
-        payload.set('name', data.manager || data.company || '교육 문의');
-        payload.set('subject', `[더소통컴퍼니 ${data.education_field || '교육'} 문의] ${data.company || data.manager || '홈페이지 문의'}`);
-        payload.set('from_name', '더소통컴퍼니 홈페이지');
-        payload.set('replyto', data.email || '');
-        payload.set('page_source', location.pathname);
-        payload.set('schedule_first', data.schedule_first);
-        payload.set('schedule_second', data.schedule_second);
-        payload.set('schedule_flexible', data.schedule_flexible);
-        payload.set('schedule', data.schedule);
-        payload.set('lecture_duration', data.lecture_duration || '미입력');
-        payload.set('lecture_time_window', data.lecture_time_window || '미입력');
-
-        const { submitInquiry } = await import('/programs/contact-delivery.js');
-        await submitInquiry(payload, deliveryWindow);
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: config.formKey,
+            subject: `[더소통컴퍼니 ${data.education_field || '교육'} 문의] ${data.company || data.manager || '홈페이지 문의'}`,
+            from_name: '더소통컴퍼니 홈페이지',
+            replyto: data.email,
+            page_source: location.pathname,
+            ...data,
+          }),
+        });
+        const result = await response.json();
+        if (!response.ok || !result.success) throw new Error(result.message || '문의 전송 실패');
         alert('문의가 정상 접수되었습니다.');
         form.reset();
         const preset = form.dataset.preset;
@@ -71,10 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         syncScheduleRules();
       } catch (error) {
-        if (deliveryWindow && !deliveryWindow.closed) deliveryWindow.close();
         console.error(error);
-        const { inquiryErrorMessage } = await import('/programs/contact-delivery.js');
-        alert(inquiryErrorMessage(error));
+        alert('문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
       } finally {
         button.disabled = false;
         button.textContent = original;
