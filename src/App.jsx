@@ -1,3 +1,4 @@
+import { submitInquiry, inquiryErrorMessage } from "./contact-delivery.js";
 import { useState } from "react";
 import {
   Briefcase,
@@ -196,6 +197,10 @@ export default function DeosotongCompanyHomepage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const button = e.currentTarget.querySelector('button[type="submit"]');
+    if (button.disabled) return;
+    button.disabled = true;
+    button.textContent = "접수 중...";
     try {
       const configResponse = await fetch("/api/contact", {
         headers: { Accept: "application/json" },
@@ -236,16 +241,7 @@ export default function DeosotongCompanyHomepage() {
       payload.set("access_key", config.formKey);
       Object.entries(data).forEach(([key, value]) => payload.set(key, value));
 
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: { Accept: "application/json" },
-        body: payload,
-      });
-
-      const result = await response.json().catch(() => null);
-      if (!response.ok || result?.success !== true) {
-        throw new Error(`문의 전송 실패 (HTTP ${response.status})`);
-      }
+      await submitInquiry(payload);
 
       alert("문의가 정상 접수되었습니다.");
       setFormData({
@@ -267,7 +263,10 @@ export default function DeosotongCompanyHomepage() {
       });
     } catch (error) {
       console.error("Contact submission failed", error instanceof Error ? error.message : error);
-      alert("문의 전송이 완료되지 않았습니다. 입력 내용은 유지됩니다. 다시 시도하거나 이메일 konemi@naver.com / 전화 010-5007-2314로 문의해 주세요.");
+      alert(inquiryErrorMessage(error));
+    } finally {
+      button.disabled = false;
+      button.textContent = "문의하기";
     }
   };
 
