@@ -3,15 +3,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const firstDate = form.querySelector('[name="schedule_first"]');
     const secondDate = form.querySelector('[name="schedule_second"]');
     const flexible = form.querySelector('[name="schedule_flexible"]');
+    const status = form.querySelector('.form-status') || document.createElement('p');
+    if (!status.parentElement) {
+      status.className = 'form-status';
+      status.setAttribute('role', 'status');
+      status.setAttribute('aria-live', 'polite');
+      form.appendChild(status);
+    }
 
     const syncScheduleRules = () => {
       if (firstDate) firstDate.required = !flexible?.checked;
       if (secondDate) secondDate.min = firstDate?.value || '';
     };
-
     firstDate?.addEventListener('change', syncScheduleRules);
     flexible?.addEventListener('change', syncScheduleRules);
     syncScheduleRules();
+
+    const setStatus = (message, kind) => {
+      status.textContent = message;
+      status.dataset.state = kind;
+      status.style.color = kind === 'success' ? '#047857' : kind === 'error' ? '#be123c' : '#475569';
+    };
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -19,9 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!form.reportValidity()) return;
 
       const button = form.querySelector('button[type="submit"]');
+      if (!button || button.disabled) return;
       const original = button.textContent;
       button.disabled = true;
       button.textContent = '접수 중...';
+      setStatus('문의 내용을 전송하고 있습니다.', 'pending');
 
       const data = Object.fromEntries(new FormData(form).entries());
       const scheduleFlexible = flexible?.checked;
@@ -37,40 +51,38 @@ document.addEventListener('DOMContentLoaded', () => {
           headers: { Accept: 'application/json' },
           cache: 'no-store',
         });
+        if (!configResponse.ok) throw new Error('문의 접수 설정 오류');
         const config = await configResponse.json();
-        if (!configResponse.ok || !config.formKey) throw new Error('문의 전송 설정 오류');
+        if (!config.formKey) throw new Error('문의 접수 설정 오류');
 
-        const payload = {
-          access_key: config.formKey,
-          redirect: new URL('/contact-complete.html', location.origin).href,
-          subject: `[더소통컴퍼니 ${data.education_field || '교육'} 문의] ${data.company || data.manager || '홈페이지 문의'}`,
-          from_name: '더소통컴퍼니 홈페이지',
-          name: data.manager || data.company || '교육 문의',
-          replyto: data.email || '',
-          page_source: location.pathname,
-          ...data,
-          lecture_duration: data.lecture_duration || '미입력',
-          lecture_time_window: data.lecture_time_window || '미입력',
-        };
-        // Submit through the browser's native form transport (no cross-origin fetch).
-        // A successful provider response redirects to our completion page.
-        const postForm = document.createElement('form');
-        postForm.method = 'POST';
-        postForm.action = 'https://api.web3forms.com/submit';
-        postForm.acceptCharset = 'UTF-8';
-        postForm.style.display = 'none';
-        for (const [name, value] of Object.entries(payload)) {
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = name;
-          input.value = value || '';
-          postForm.appendChild(input);
+        const payload = new FormData(form);
+        payload.set('access_key', config.formKey);
+        payload.set('subject', `[더소통컴퍼니 ${data.education_field || '교육'} 문의] ${data.company || data.manager || '홈페이지 문의'}`);
+        payload.set('from_name', '더소통컴퍼니 홈페이지');
+        payload.set('name', data.manager || data.company || '교육 문의');
+        payload.set('replyto', data.email || '');
+        payload.set('page_source', location.pathname);
+        payload.set('schedule_first', data.schedule_first);
+        payload.set('schedule_second', data.schedule_second);
+        payload.set('schedule_flexible', data.schedule_flexible);
+        payload.set('schedule', data.schedule);
+        payload.set('lecture_duration', data.lecture_duration || '미입력');
+        payload.set('lecture_time_window', data.lecture_time_window || '미입력');
+
+        const { submitInquiry } = await import('/programs/contact-delivery.js');
+        await submitInquiry(payload);
+        form.reset();
+        const preset = form.dataset.preset;
+        if (preset) {
+          const field = form.querySelector('[name="education_field"]');
+          if (field) field.value = preset;
         }
-        document.body.appendChild(postForm);
-        HTMLFormElement.prototype.submit.call(postForm);
-    } catch (error) {
-        console.error(error);
-        alert('문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        syncScheduleRules();
+        setStatus('문의가 접수되었습니다. 확인 후 연락드리겠습니다.', 'success');
+      } catch (error) {
+        console.error('Inquiry confirmation failed', error instanceof Error ? error.message : error);
+        const { inquiryErrorMessage } = await import('/programs/contact-delivery.js');
+        setStatus(inquiryErrorMessage(error), 'error');
       } finally {
         button.disabled = false;
         button.textContent = original;
