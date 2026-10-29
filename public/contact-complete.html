@@ -1,7 +1,29 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1"><title>문의 접수 완료 | 더소통컴퍼니</title></head><body><p>문의가 접수되었습니다. 확인 후 연락드리겠습니다.</p><a href="/">홈페이지로 돌아가기</a><script>
-const receipt = new URL(location.href).searchParams.get('receipt');
-const receiver = window.opener || (window.parent !== window ? window.parent : null);
-if (receiver && /^[a-f0-9-]{36}$/.test(receipt || '')) {
-  receiver.postMessage({ type: 'contact-received', receipt }, location.origin);
-}
-</script></body></html>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>교육문의 접수 완료 | 더소통컴퍼니</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; display:grid; place-items:center; background:#f6f8fc; color:#17243b; font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif; padding:24px; }
+    main { width:min(100%,540px); background:white; border:1px solid #e2e8f0; border-radius:24px; padding:42px 32px; box-shadow:0 12px 45px rgba(15,23,42,.07); }
+    .mark { display:inline-grid; place-items:center; width:48px; height:48px; border-radius:50%; background:#e7f4ed; color:#147d48; font-size:26px; font-weight:700; }
+    h1 { font-size:25px; line-height:1.4; margin:20px 0 14px; }
+    p { color:#52627c; line-height:1.85; }
+    a { display:inline-block; margin-top:16px; background:#172c58; color:white; border-radius:12px; padding:14px 21px; text-decoration:none; font-weight:600; }
+    small { display:block; margin-top:24px; color:#768398; }
+  </style>
+</head>
+<body>
+<main>
+  <span class="mark" aria-hidden="true">✓</span>
+  <h1>교육문의가 접수되었습니다.</h1>
+  <p>더소통컴퍼니에 문의해 주셔서 감사합니다. 접수된 내용을 확인한 뒤 순차적으로 연락드리겠습니다.</p>
+  <p>문의 확인: <a style="background:none;color:#172c58;margin:0;padding:0" href="mailto:konemi@naver.com">konemi@naver.com</a> · 010-5007-2314</p>
+  <a href="/">홈페이지로 돌아가기</a>
+  <small>본 화면은 문의 전송 서비스에서 성공적으로 접수한 뒤 이동하는 완료 페이지입니다.</small>
+</main>
+</body>
+</html>
