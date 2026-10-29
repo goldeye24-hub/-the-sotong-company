@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { submitInquiry, inquiryErrorMessage } from "./contact-delivery.js";
 import {
   Briefcase,
   HeartHandshake,
@@ -116,6 +117,8 @@ function DeosotongLogo({ compact = false }) {
 }
 
 export default function DeosotongCompanyHomepage() {
+  const [inquiryStatus, setInquiryStatus] = useState({ type: "idle", message: "" });
+  const inquirySending = useRef(false);
   const [formData, setFormData] = useState({
     company: "",
     manager: "",
@@ -195,21 +198,22 @@ export default function DeosotongCompanyHomepage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const button = e.currentTarget.querySelector('button[type="submit"]');
-    if (button?.disabled) return;
-    if (button) button.disabled = true;
+    if (inquirySending.current) return;
+    const inquiryForm = e.currentTarget;
+    inquirySending.current = true;
+    setInquiryStatus({ type: "pending", message: "문의 내용을 전송하고 있습니다." });
 
     try {
       const configResponse = await fetch("/api/contact", {
         headers: { Accept: "application/json" },
         cache: "no-store",
       });
+      if (!configResponse.ok) throw new Error("문의 접수 설정 오류");
       const config = await configResponse.json();
-      if (!configResponse.ok || !config.formKey) throw new Error("문의 접수 설정 오류");
+      if (!config.formKey) throw new Error("문의 접수 설정 오류");
 
       const data = {
         access_key: config.formKey,
-        redirect: new URL("/contact-complete.html", window.location.origin).href,
         subject: `[더소통컴퍼니 교육문의] ${formData.company || formData.manager || "홈페이지 문의"}`,
         from_name: "더소통컴퍼니 홈페이지",
         name: formData.manager || formData.company,
@@ -237,26 +241,35 @@ export default function DeosotongCompanyHomepage() {
         page_source: window.location.pathname,
       };
 
-      // Browser-native form POST: avoids fetch/CORS errors on the external API.
-      // Only Web3Forms' successful redirect can open the completion page.
-      const postForm = document.createElement("form");
-      postForm.method = "POST";
-      postForm.action = "https://api.web3forms.com/submit";
-      postForm.acceptCharset = "UTF-8";
-      postForm.style.display = "none";
-      for (const [name, value] of Object.entries(data)) {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = name;
-        input.value = value || "";
-        postForm.appendChild(input);
-      }
-      document.body.appendChild(postForm);
-      HTMLFormElement.prototype.submit.call(postForm);
+
+      const payload = new FormData();
+      Object.entries(data).forEach(([key, value]) => payload.set(key, String(value ?? "")));
+      await submitInquiry(payload);
+
+      setFormData({
+        company: "",
+        manager: "",
+        phone: "",
+        email: "",
+        field: "",
+        people: "",
+        location: "",
+        schedule_first: "",
+        schedule_second: "",
+        schedule_flexible: false,
+        lecture_duration: "",
+        lecture_time_window: "",
+        budget_min: "",
+        budget_max: "",
+        message: "",
+      });
+      inquiryForm.reset();
+      setInquiryStatus({ type: "success", message: "문의가 접수되었습니다. 확인 후 연락드리겠습니다." });
     } catch (error) {
-      console.error("Inquiry submission initialization failed", error instanceof Error ? error.message : error);
-      if (button) button.disabled = false;
-      alert("문의 전송을 시작하지 못했습니다. 입력 내용은 유지됩니다. 이메일 konemi@naver.com 또는 전화 010-5007-2314로 문의해 주세요.");
+      console.error("Inquiry confirmation failed", error instanceof Error ? error.message : error);
+      setInquiryStatus({ type: "error", message: inquiryErrorMessage(error) });
+    } finally {
+      inquirySending.current = false;
     }
   };
 
@@ -827,10 +840,18 @@ export default function DeosotongCompanyHomepage() {
 
               <button
                 type="submit"
-                className="mt-5 w-full rounded-full bg-[linear-gradient(135deg,#0f172a_0%,#1e3a8a_100%)] px-6 py-3 text-sm font-medium text-white shadow-sm hover:opacity-95"
+                disabled={inquiryStatus.type === "pending"}
+                className="mt-5 w-full rounded-full bg-[linear-gradient(135deg,#0f172a_0%,#1e3a8a_100%)] px-6 py-3 text-sm font-medium text-white shadow-sm hover:opacity-95 disabled:cursor-wait disabled:opacity-60"
               >
-                문의하기
+                {inquiryStatus.type === "pending" ? "접수 중..." : "문의하기"}
               </button>
+              <p
+                role="status"
+                aria-live="polite"
+                className={`mt-3 text-sm leading-6 ${inquiryStatus.type === "success" ? "text-emerald-700" : inquiryStatus.type === "error" ? "text-rose-700" : "text-slate-600"}`}
+              >
+                {inquiryStatus.message}
+              </p>
             </form>
           </div>
         </section>
