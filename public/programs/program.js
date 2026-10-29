@@ -1,3 +1,4 @@
+import('/programs/contact-delivery.js');
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-inquiry-form]').forEach((form) => {
     const firstDate = form.querySelector('[name="schedule_first"]');
