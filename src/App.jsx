@@ -127,6 +127,8 @@ export default function DeosotongCompanyHomepage() {
     schedule_first: "",
     schedule_second: "",
     schedule_flexible: false,
+    lecture_duration: "",
+    lecture_time_window: "",
     budget_min: "",
     budget_max: "",
     message: "",
@@ -224,6 +226,8 @@ export default function DeosotongCompanyHomepage() {
           schedule_first: formData.schedule_first,
           schedule_second: formData.schedule_second || "미입력",
           schedule_flexible: formData.schedule_flexible ? "협의 가능" : "해당 없음",
+          lecture_duration: formData.lecture_duration,
+          lecture_time_window: formData.lecture_time_window,
           schedule: formData.schedule_flexible
             ? `1순위 ${formData.schedule_first || "미정"} / 2순위 ${formData.schedule_second || "미정"} / 일정 협의 가능`
             : `1순위 ${formData.schedule_first} / 2순위 ${formData.schedule_second || "미입력"}`,
@@ -250,6 +254,8 @@ export default function DeosotongCompanyHomepage() {
         schedule_first: "",
         schedule_second: "",
         schedule_flexible: false,
+        lecture_duration: "",
+        lecture_time_window: "",
         budget_min: "",
         budget_max: "",
         message: "",
@@ -724,6 +730,37 @@ export default function DeosotongCompanyHomepage() {
                         min={formData.schedule_first || undefined}
                         onChange={(e) => handleChange("schedule_second", e.target.value)}
                         className="w-full rounded-2xl border border-slate-200 bg-[linear-gradient(180deg,#f8fbff_0%,#f8fafc_100%)] px-4 py-3 outline-none focus:border-sky-300 focus:ring-2 focus:ring-sky-100"
+                      />
+                    </label>
+                    <label className="text-sm text-slate-700">
+                      <div className="mb-2 font-medium">예상 강의시간 <span className="text-rose-500">*</span></div>
+                      <select
+                        value={formData.lecture_duration}
+                        onChange={(e) => handleChange("lecture_duration", e.target.value)}
+                        required
+                        className="w-full rounded-2xl border border-slate-200 bg-[linear-gradient(180deg,#f8fbff_0%,#f8fafc_100%)] px-4 py-3 outline-none focus:border-sky-300 focus:ring-2 focus:ring-sky-100"
+                      >
+                        <option value="">예상 교육시간 선택</option>
+                        <option value="1시간">1시간</option>
+                        <option value="2시간">2시간</option>
+                        <option value="3시간">3시간</option>
+                        <option value="4시간 (반일)">4시간 (반일)</option>
+                        <option value="6시간">6시간</option>
+                        <option value="8시간 (종일)">8시간 (종일)</option>
+                        <option value="기타 / 협의">기타 / 협의</option>
+                        <option value="미정 / 협의 가능">미정 / 협의 가능</option>
+                      </select>
+                    </label>
+                    <label className="text-sm text-slate-700">
+                      <div className="mb-2 font-medium">희망 강의 시간대 <span className="text-rose-500">*</span></div>
+                      <input
+                        type="text"
+                        value={formData.lecture_time_window}
+                        onChange={(e) => handleChange("lecture_time_window", e.target.value)}
+                        placeholder="예: 10:00~12:00 / 시간 협의 가능"
+                        maxLength={100}
+                        required
+                        className="w-full rounded-2xl border border-slate-200 bg-[linear-gradient(180deg,#f8fbff_0%,#f8fafc_100%)] px-4 py-3 outline-none placeholder:text-slate-400 focus:border-sky-300 focus:ring-2 focus:ring-sky-100"
                       />
                     </label>
                   </div>
