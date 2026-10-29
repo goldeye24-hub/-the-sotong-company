@@ -40,29 +40,35 @@ document.addEventListener('DOMContentLoaded', () => {
         const config = await configResponse.json();
         if (!configResponse.ok || !config.formKey) throw new Error('문의 전송 설정 오류');
 
-        const response = await fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({
-            access_key: config.formKey,
-            subject: `[더소통컴퍼니 ${data.education_field || '교육'} 문의] ${data.company || data.manager || '홈페이지 문의'}`,
-            from_name: '더소통컴퍼니 홈페이지',
-            replyto: data.email,
-            page_source: location.pathname,
-            ...data,
-          }),
-        });
-        const result = await response.json();
-        if (!response.ok || !result.success) throw new Error(result.message || '문의 전송 실패');
-        alert('문의가 정상 접수되었습니다.');
-        form.reset();
-        const preset = form.dataset.preset;
-        if (preset) {
-          const field = form.querySelector('[name="education_field"]');
-          if (field) field.value = preset;
+        const payload = {
+          access_key: config.formKey,
+          redirect: new URL('/contact-complete.html', location.origin).href,
+          subject: `[더소통컴퍼니 ${data.education_field || '교육'} 문의] ${data.company || data.manager || '홈페이지 문의'}`,
+          from_name: '더소통컴퍼니 홈페이지',
+          name: data.manager || data.company || '교육 문의',
+          replyto: data.email || '',
+          page_source: location.pathname,
+          ...data,
+          lecture_duration: data.lecture_duration || '미입력',
+          lecture_time_window: data.lecture_time_window || '미입력',
+        };
+        // Submit through the browser's native form transport (no cross-origin fetch).
+        // A successful provider response redirects to our completion page.
+        const postForm = document.createElement('form');
+        postForm.method = 'POST';
+        postForm.action = 'https://api.web3forms.com/submit';
+        postForm.acceptCharset = 'UTF-8';
+        postForm.style.display = 'none';
+        for (const [name, value] of Object.entries(payload)) {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = name;
+          input.value = value || '';
+          postForm.appendChild(input);
         }
-        syncScheduleRules();
-      } catch (error) {
+        document.body.appendChild(postForm);
+        HTMLFormElement.prototype.submit.call(postForm);
+    } catch (error) {
         console.error(error);
         alert('문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
       } finally {
