@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { submitInquiry, inquiryErrorMessage } from "./contact-delivery.js";
 import {
   Briefcase,
@@ -119,6 +119,14 @@ function DeosotongLogo({ compact = false }) {
 export default function DeosotongCompanyHomepage() {
   const [inquiryStatus, setInquiryStatus] = useState({ type: "idle", message: "" });
   const inquirySending = useRef(false);
+
+  useEffect(() => {
+    if (inquiryStatus.type !== "success") return undefined;
+    const timeout = window.setTimeout(() => {
+      setInquiryStatus({ type: "idle", message: "" });
+    }, 4500);
+    return () => window.clearTimeout(timeout);
+  }, [inquiryStatus.type]);
   const [formData, setFormData] = useState({
     company: "",
     manager: "",
@@ -275,6 +283,16 @@ export default function DeosotongCompanyHomepage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
+      {inquiryStatus.type === "success" && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed left-1/2 top-5 z-[100] flex w-[max-content] max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center gap-3 rounded-xl border border-emerald-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-[0_12px_40px_rgba(15,23,42,0.18)]"
+        >
+          <span aria-hidden="true" className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-emerald-100 text-emerald-700">✓</span>
+          문의가 접수되었습니다. 확인 후 연락드리겠습니다.
+        </div>
+      )}
       <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 lg:px-10 lg:py-4">
           <div className="min-w-0 flex-1 lg:flex-none">
@@ -845,13 +863,15 @@ export default function DeosotongCompanyHomepage() {
               >
                 {inquiryStatus.type === "pending" ? "접수 중..." : "문의하기"}
               </button>
-              <p
-                role="status"
-                aria-live="polite"
-                className={`mt-3 text-sm leading-6 ${inquiryStatus.type === "success" ? "text-emerald-700" : inquiryStatus.type === "error" ? "text-rose-700" : "text-slate-600"}`}
-              >
-                {inquiryStatus.message}
-              </p>
+              {inquiryStatus.type !== "success" && inquiryStatus.type !== "idle" && (
+                <p
+                  role="status"
+                  aria-live="polite"
+                  className={`mt-3 text-sm leading-6 ${inquiryStatus.type === "error" ? "text-rose-700" : "text-slate-600"}`}
+                >
+                  {inquiryStatus.message}
+                </p>
+              )}
             </form>
           </div>
         </section>
