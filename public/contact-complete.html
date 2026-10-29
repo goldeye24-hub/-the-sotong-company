@@ -25,5 +25,12 @@
   <a href="/">홈페이지로 돌아가기</a>
   <small>본 화면은 문의 전송 서비스에서 성공적으로 접수한 뒤 이동하는 완료 페이지입니다.</small>
 </main>
+<script>
+// Only the successful same-origin provider redirect can acknowledge a pending form.
+const receipt = new URL(location.href).searchParams.get("receipt");
+if (window.parent !== window && /^[0-9a-f-]{36}$/i.test(receipt || "")) {
+  window.parent.postMessage({ type: "sotong-inquiry-received", receipt }, location.origin);
+}
+</script>
 </body>
 </html>
