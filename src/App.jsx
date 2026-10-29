@@ -195,6 +195,9 @@ export default function DeosotongCompanyHomepage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const button = e.currentTarget.querySelector('button[type="submit"]');
+    if (button?.disabled) return;
+    if (button) button.disabled = true;
 
     try {
       const configResponse = await fetch("/api/contact", {
@@ -202,66 +205,58 @@ export default function DeosotongCompanyHomepage() {
         cache: "no-store",
       });
       const config = await configResponse.json();
-      if (!configResponse.ok || !config.formKey) throw new Error("문의 전송 설정 오류");
+      if (!configResponse.ok || !config.formKey) throw new Error("문의 접수 설정 오류");
 
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          access_key: config.formKey,
-          subject: `[더소통컴퍼니 교육문의] ${formData.company || formData.manager || "홈페이지 문의"}`,
-          from_name: "더소통컴퍼니 홈페이지",
-          replyto: formData.email,
-          company: formData.company,
-          manager: formData.manager,
-          phone: formData.phone,
-          email: formData.email,
-          field: formData.field,
-          education_field: formData.field,
-          people: formData.people,
-          location: formData.location,
-          schedule_first: formData.schedule_first,
-          schedule_second: formData.schedule_second || "미입력",
-          schedule_flexible: formData.schedule_flexible ? "협의 가능" : "해당 없음",
-          lecture_duration: formData.lecture_duration,
-          lecture_time_window: formData.lecture_time_window,
-          schedule: formData.schedule_flexible
-            ? `1순위 ${formData.schedule_first || "미정"} / 2순위 ${formData.schedule_second || "미정"} / 일정 협의 가능`
-            : `1순위 ${formData.schedule_first} / 2순위 ${formData.schedule_second || "미입력"}`,
-          budget_min: formData.budget_min,
-          budget_max: formData.budget_max,
-          message: formData.message,
-          privacy_consent: "동의",
-          page_source: window.location.pathname,
-        }),
-      });
+      const data = {
+        access_key: config.formKey,
+        redirect: new URL("/contact-complete.html", window.location.origin).href,
+        subject: `[더소통컴퍼니 교육문의] ${formData.company || formData.manager || "홈페이지 문의"}`,
+        from_name: "더소통컴퍼니 홈페이지",
+        name: formData.manager || formData.company,
+        replyto: formData.email,
+        company: formData.company,
+        manager: formData.manager,
+        phone: formData.phone,
+        email: formData.email,
+        field: formData.field,
+        education_field: formData.field,
+        people: formData.people,
+        location: formData.location,
+        schedule_first: formData.schedule_first || "미정",
+        schedule_second: formData.schedule_second || "미입력",
+        schedule_flexible: formData.schedule_flexible ? "협의 가능" : "해당 없음",
+        lecture_duration: formData.lecture_duration,
+        lecture_time_window: formData.lecture_time_window,
+        schedule: formData.schedule_flexible
+          ? `1순위 ${formData.schedule_first || "미정"} / 2순위 ${formData.schedule_second || "미입력"} / 일정 협의 가능`
+          : `1순위 ${formData.schedule_first} / 2순위 ${formData.schedule_second || "미입력"}`,
+        budget_min: formData.budget_min,
+        budget_max: formData.budget_max,
+        message: formData.message,
+        privacy_consent: "동의",
+        page_source: window.location.pathname,
+      };
 
-      const result = await response.json();
-      if (!response.ok || !result.success) throw new Error(result.message || "문의 전송 실패");
-
-      alert("문의가 정상 접수되었습니다.");
-      setFormData({
-        company: "",
-        manager: "",
-        phone: "",
-        email: "",
-        field: "",
-        people: "",
-        location: "",
-        schedule_first: "",
-        schedule_second: "",
-        schedule_flexible: false,
-        lecture_duration: "",
-        lecture_time_window: "",
-        budget_min: "",
-        budget_max: "",
-        message: "",
-      });
+      // Browser-native form POST: avoids fetch/CORS errors on the external API.
+      // Only Web3Forms' successful redirect can open the completion page.
+      const postForm = document.createElement("form");
+      postForm.method = "POST";
+      postForm.action = "https://api.web3forms.com/submit";
+      postForm.acceptCharset = "UTF-8";
+      postForm.style.display = "none";
+      for (const [name, value] of Object.entries(data)) {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = name;
+        input.value = value || "";
+        postForm.appendChild(input);
+      }
+      document.body.appendChild(postForm);
+      HTMLFormElement.prototype.submit.call(postForm);
     } catch (error) {
-      alert("문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+      console.error("Inquiry submission initialization failed", error instanceof Error ? error.message : error);
+      if (button) button.disabled = false;
+      alert("문의 전송을 시작하지 못했습니다. 입력 내용은 유지됩니다. 이메일 konemi@naver.com 또는 전화 010-5007-2314로 문의해 주세요.");
     }
   };
 
