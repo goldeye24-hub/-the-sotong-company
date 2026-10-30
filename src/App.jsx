@@ -599,6 +599,13 @@ export default function DeosotongCompanyHomepage() {
               );
             })}
           </div>
+          <div className="mt-5 rounded-[24px] border border-slate-200 bg-white px-5 py-5 shadow-sm sm:flex sm:items-center sm:justify-between sm:gap-4 lg:px-7">
+            <div>
+              <div className="text-sm font-semibold text-slate-900">기업·공공기관 워크숍 통합 기획</div>
+              <p className="mt-1 text-sm leading-6 text-slate-600">MBTI·소통·힐링특강, 팀빌딩, 조직문화·리더십 교육을 한 프로그램으로 구성합니다.</p>
+            </div>
+            <a href="/corporate-workshop/" className="mt-4 inline-flex shrink-0 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 sm:mt-0">기업워크숍 프로그램 보기 →</a>
+          </div>
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-10 lg:py-16">
