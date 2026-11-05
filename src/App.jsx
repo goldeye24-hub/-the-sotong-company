@@ -26,13 +26,15 @@ const BLOG_URL = "https://blog.naver.com/the-sotong";
 const INSTAGRAM_URL = "https://www.instagram.com/kwon_hyemi_/";
 
 const serviceMeta = {
-  조직활성화: { icon: Users, accent: "from-slate-700 to-slate-500" },
-  성격유형진단: { icon: UserRoundSearch, accent: "from-sky-800 to-sky-600" },
-  소통교육: { icon: MessagesSquare, accent: "from-cyan-800 to-cyan-600" },
-  리더십교육: { icon: Briefcase, accent: "from-indigo-800 to-indigo-600" },
-  "힐링 · 스트레스교육": { icon: HeartHandshake, accent: "from-teal-800 to-teal-600" },
-  법정의무교육: { icon: ShieldCheck, accent: "from-slate-800 to-slate-600" },
-  "강의컨설팅 · 강사섭외": { icon: GraduationCap, accent: "from-blue-900 to-blue-700" },
+  "팀빌딩·조직활성화": { icon: Users, accent: "from-slate-700 to-slate-500" },
+  "MBTI 조직교육": { icon: UserRoundSearch, accent: "from-sky-800 to-sky-600" },
+  "소통·커뮤니케이션": { icon: MessagesSquare, accent: "from-cyan-800 to-cyan-600" },
+  "리더십·관리자": { icon: Briefcase, accent: "from-indigo-800 to-indigo-600" },
+  "스트레스관리·힐링": { icon: HeartHandshake, accent: "from-teal-800 to-teal-600" },
+  "법정·인권·예방교육": { icon: ShieldCheck, accent: "from-slate-800 to-slate-600" },
+  "CS·민원응대": { icon: Headset, accent: "from-blue-800 to-blue-600" },
+  "승진자·신입사원·비즈니스매너": { icon: GraduationCap, accent: "from-blue-900 to-blue-700" },
+  "기업·공공기관 워크숍": { icon: Presentation, accent: "from-violet-700 to-indigo-600" },
 };
 
 const processMeta = [
@@ -151,34 +153,15 @@ export default function DeosotongCompanyHomepage() {
   const menu = ["HOME", "회사소개", "교육프로그램", "교육문의"];
 
   const services = [
-    {
-      title: "조직활성화",
-      items: ["팀빌딩", "조직문화진단", "심리적 안전감", "협업문화", "조직몰입", "조직활성화 워크숍"],
-    },
-    {
-      title: "성격유형진단",
-      items: ["MBTI", "애니어그램", "관계소통", "성향이해", "강점이해", "유형별 커뮤니케이션"],
-    },
-    {
-      title: "소통교육",
-      items: ["세대공감", "CS강의", "피드백", "부모소통", "직급별 소통", "갈등예방 대화", "고객응대 커뮤니케이션", "인성교육"],
-    },
-    {
-      title: "리더십교육",
-      items: ["팀장 리더십", "현장관리자 리더십", "조장·반장 교육", "코칭형 리더십", "중간관리자 리더십", "생산현장 리더십", "성과대화", "공감 리더십", "팔로우십", "변화관리"],
-    },
-    {
-      title: "힐링 · 스트레스교육",
-      items: ["스트레스관리", "감정관리", "싱잉볼 명상", "번아웃 예방", "회복탄력성", "마음돌봄", "이완과 호흡"],
-    },
-    {
-      title: "법정의무교육",
-      items: ["장애인 인식개선", "개인정보보호", "성희롱예방", "직장 내 괴롭힘 예방", "퇴직연금교육", "기관 맞춤 의무교육", "인권교육"],
-    },
-    {
-      title: "강의컨설팅 · 강사섭외",
-      items: ["교육기획", "강사섭외", "운영컨설팅", "프로그램 설계", "맞춤형 워크숍", "연간 교육운영", "강사 파견 운영"],
-    },
+    { title: "팀빌딩·조직활성화", href: "/team-building/", items: ["팀빌딩교육", "조직활성화", "협업", "조직문화", "워크숍"] },
+    { title: "MBTI 조직교육", href: "/mbti/", items: ["MBTI교육", "MBTI강의", "MBTI강사", "조직소통", "팀빌딩"] },
+    { title: "소통·커뮤니케이션", href: "/communication/", items: ["소통교육", "소통강의", "소통강사", "커뮤니케이션", "갈등예방"] },
+    { title: "리더십·관리자", href: "/leadership/", items: ["리더십교육", "리더십강의", "리더십강사", "팀장교육", "관리자교육"] },
+    { title: "스트레스관리·힐링", href: "/stress-healing/", items: ["스트레스관리교육", "힐링강의", "힐링강사", "번아웃예방", "회복탄력성"] },
+    { title: "법정·인권·예방교육", href: "/mandatory-human-rights/", items: ["인권교육", "괴롭힘예방", "성희롱예방", "장애인인식개선", "법정교육"] },
+    { title: "CS·민원응대", href: "/cs-complaint/", items: ["CS교육", "CS강의", "CS강사", "민원응대교육", "고객응대"] },
+    { title: "승진자·신입사원·비즈니스매너", href: "/promotion-new-employee/", items: ["승진자교육", "신입사원교육", "비즈니스매너교육", "역할전환", "직장예절"] },
+    { title: "기업·공공기관 워크숍", href: "/corporate-workshop/", items: ["기업워크숍", "조직활성화", "맞춤기획", "강사섭외", "교육운영"] },
   ];
 
   const stats = [
@@ -573,23 +556,25 @@ export default function DeosotongCompanyHomepage() {
               const Icon = meta.icon;
 
               return (
-                <div
+                <a
                   key={service.title}
-                  className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md lg:rounded-[28px] lg:p-6"
+                  href={service.href}
+                  className="block h-full rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md lg:rounded-[28px] lg:p-6"
+                  aria-label={`${service.title} 상세 교육 보기`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
                       <div
-                        className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${meta.accent} text-white shadow-sm`}
+                        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${meta.accent} text-white shadow-sm`}
                       >
                         <Icon size={22} />
                       </div>
                       <div className="text-xl font-semibold tracking-tight">{service.title}</div>
                     </div>
-                    <Sparkles size={18} className="mt-1 text-slate-400" />
+                    <Sparkles size={18} className="mt-1 shrink-0 text-slate-400" />
                   </div>
                   <div className="mt-5 flex flex-wrap gap-2">
-                    {service.items.slice(0, 5).map((item) => (
+                    {service.items.map((item) => (
                       <span
                         key={item}
                         className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-600"
@@ -598,16 +583,10 @@ export default function DeosotongCompanyHomepage() {
                       </span>
                     ))}
                   </div>
-                </div>
+                  <span className="mt-5 inline-flex text-sm font-semibold text-sky-800">상세 교육 보기 →</span>
+                </a>
               );
             })}
-          </div>
-          <div className="mt-5 rounded-[24px] border border-slate-200 bg-white px-5 py-5 shadow-sm sm:flex sm:items-center sm:justify-between sm:gap-4 lg:px-7">
-            <div>
-              <div className="text-sm font-semibold text-slate-900">기업·공공기관 워크숍 통합 기획</div>
-              <p className="mt-1 text-sm leading-6 text-slate-600">MBTI·소통·힐링특강, 팀빌딩, 조직문화·리더십 교육을 한 프로그램으로 구성합니다.</p>
-            </div>
-            <a href="/corporate-workshop/" className="mt-4 inline-flex shrink-0 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 sm:mt-0">기업워크숍 프로그램 보기 →</a>
           </div>
         </section>
 
