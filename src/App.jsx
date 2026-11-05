@@ -21,7 +21,7 @@ import {
   MonitorCheck,
 } from "lucide-react";
 
-const representativeImage = "/kwon-profile.png";
+const representativeImage = "/kwon-profile-optimized.webp";
 const BLOG_URL = "https://blog.naver.com/the-sotong";
 const INSTAGRAM_URL = "https://www.instagram.com/kwon_hyemi_/";
 
@@ -435,6 +435,10 @@ export default function DeosotongCompanyHomepage() {
                     <img
                       src={representativeImage}
                       alt="더소통컴퍼니 대표강사 권혜미 사진"
+                      width={960}
+                      height={1331}
+                      loading="eager"
+                      decoding="async"
                       className="w-full max-h-[360px] rounded-[24px] object-cover object-top sm:max-h-[440px] lg:max-h-[520px]"
                       onError={() => setRepImageError(true)}
                     />
