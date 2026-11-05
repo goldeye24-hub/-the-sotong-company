@@ -443,7 +443,7 @@ export default function DeosotongCompanyHomepage() {
           <div className="grid gap-4 lg:gap-6 lg:grid-cols-[0.9fr_1.1fr]">
             <div className="overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-sm">
               <div className="grid h-full md:grid-cols-[0.85fr_1.15fr]">
-                <div className="flex items-center bg-slate-100 p-4 sm:p-6 md:p-8">
+                <div className="flex flex-col items-center justify-center gap-5 bg-slate-100 p-4 sm:p-6 md:p-8">
                   {repImageError ? (
                     <div className="flex h-full min-h-[280px] w-full items-center justify-center rounded-[24px] border border-slate-200 bg-white text-center text-sm leading-6 text-slate-500 sm:min-h-[360px] lg:min-h-[420px]">
                       대표강사 사진을 불러오지 못했습니다.
@@ -456,6 +456,9 @@ export default function DeosotongCompanyHomepage() {
                       onError={() => setRepImageError(true)}
                     />
                   )}
+                  <p className="text-center text-sm font-semibold tracking-tight text-slate-700 sm:text-base">
+                    더소통컴퍼니 대표 ㅣ 경영학 박사
+                  </p>
                 </div>
                 <div className="flex flex-col justify-center p-5 sm:p-6 lg:p-8">
                   <div className="text-sm font-semibold text-slate-500">대표 인사말</div>
