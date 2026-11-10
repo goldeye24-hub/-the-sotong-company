@@ -78,7 +78,7 @@ function DeosotongLogo({ compact = false }) {
   return (
     <div className={`flex items-center ${compact ? "gap-2" : "gap-3"}`}>
       <img
-        src="/favicon.svg?v=20261110"
+        src="/brand-mark.svg?v=20261110"
         alt=""
         width={compact ? 40 : 48}
         height={compact ? 40 : 48}
