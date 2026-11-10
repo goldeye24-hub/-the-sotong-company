@@ -77,35 +77,13 @@ const strengthMeta = [
 function DeosotongLogo({ compact = false }) {
   return (
     <div className={`flex items-center ${compact ? "gap-2" : "gap-3"}`}>
-      <div
-        className={`relative flex items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#0f172a_0%,#1e3a8a_100%)] text-white shadow-sm ${
-          compact ? "h-10 w-10" : "h-12 w-12"
-        }`}
-      >
-        <svg
-          viewBox="0 0 48 48"
-          className={compact ? "h-6 w-6" : "h-7 w-7"}
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M24 8C15.2 8 8 14.5 8 22.7C8 27.7 10.7 32.2 15.1 35L13.7 40L19.4 37.2C20.9 37.6 22.4 37.8 24 37.8C32.8 37.8 40 31.3 40 23.1C40 14.9 32.8 8 24 8Z"
-            fill="white"
-            fillOpacity="0.16"
-          />
-          <path
-            d="M18 20.5C18 17.5 20.6 15 24 15C27.4 15 30 17.5 30 20.5C30 23.5 27.4 26 24 26C20.6 26 18 23.5 18 20.5Z"
-            stroke="white"
-            strokeWidth="2.4"
-          />
-          <path
-            d="M15.5 31C17.5 28.7 20.5 27.3 24 27.3C27.5 27.3 30.5 28.7 32.5 31"
-            stroke="white"
-            strokeWidth="2.4"
-            strokeLinecap="round"
-          />
-        </svg>
-      </div>
+      <img
+        src="/favicon.svg?v=20261110"
+        alt=""
+        width={compact ? 40 : 48}
+        height={compact ? 40 : 48}
+        className={`block shrink-0 shadow-sm ${compact ? "h-10 w-10" : "h-12 w-12"}`}
+      />
       <div>
         <div className={`font-bold tracking-tight text-slate-900 ${compact ? "text-lg" : "text-2xl"}`}>
           더소통컴퍼니
