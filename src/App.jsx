@@ -28,7 +28,7 @@ const INSTAGRAM_URL = "https://www.instagram.com/kwon_hyemi_/";
 const serviceMeta = {
   "팀빌딩·조직활성화": { icon: Users, accent: "from-slate-700 to-slate-500" },
   "MBTI 조직교육": { icon: UserRoundSearch, accent: "from-sky-800 to-sky-600" },
-  "소통·커뮤니케이션": { icon: MessagesSquare, accent: "from-cyan-800 to-cyan-600" },
+  "소통교육·커뮤니케이션": { icon: MessagesSquare, accent: "from-cyan-800 to-cyan-600" },
   "리더십·관리자": { icon: Briefcase, accent: "from-indigo-800 to-indigo-600" },
   "스트레스관리·힐링": { icon: HeartHandshake, accent: "from-teal-800 to-teal-600" },
   "법정·인권·예방교육": { icon: ShieldCheck, accent: "from-slate-800 to-slate-600" },
@@ -133,7 +133,7 @@ export default function DeosotongCompanyHomepage() {
   const services = [
     { title: "팀빌딩·조직활성화", href: "/team-building/", items: ["팀빌딩교육", "조직활성화", "협업", "조직문화", "워크숍"] },
     { title: "MBTI 조직교육", href: "/mbti/", items: ["MBTI교육", "MBTI강의", "MBTI강사", "조직소통", "팀빌딩"] },
-    { title: "소통·커뮤니케이션", href: "/communication/", items: ["소통교육", "소통강의", "소통강사", "커뮤니케이션", "갈등예방"] },
+    { title: "소통교육·커뮤니케이션", href: "/communication/", items: ["소통교육", "소통강의", "소통강사", "커뮤니케이션", "갈등예방"] },
     { title: "리더십·관리자", href: "/leadership/", items: ["리더십교육", "리더십강의", "리더십강사", "팀장교육", "관리자교육"] },
     { title: "스트레스관리·힐링", href: "/stress-healing/", items: ["스트레스관리교육", "힐링강의", "힐링강사", "번아웃예방", "회복탄력성"] },
     { title: "법정·인권·예방교육", href: "/mandatory-human-rights/", items: ["인권교육", "괴롭힘예방", "성희롱예방", "장애인인식개선", "법정교육"] },
@@ -291,7 +291,7 @@ export default function DeosotongCompanyHomepage() {
               </h1>
               <p className="mt-5 max-w-2xl text-[15px] leading-7 text-slate-600 lg:mt-6 lg:text-lg">
                 더소통컴퍼니는 대표강사 권혜미 박사와 함께 조직의 변화와 성장을 설계하는 교육 컨설팅 파트너입니다.
-                교육문의부터 상담, 강사섭외, 운영컨설팅까지 조직의 상황에 맞게 함께합니다.
+                기업·공공기관의 소통교육과 소통강의를 비롯해 교육 상담부터 강사섭외, 운영컨설팅까지 조직의 상황에 맞게 함께합니다.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <a href="#교육프로그램" className="rounded-full bg-slate-900 px-6 py-3 text-sm font-medium text-white shadow-sm">
