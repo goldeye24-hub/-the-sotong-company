@@ -151,14 +151,54 @@ export default function DeosotongCompanyHomepage() {
   const formats = ["1회 특강", "반일 워크숍", "정기 과정", "연간 위탁운영", "강사섭외", "강사 파견 운영"];
   const targets = ["기업", "공공기관", "학교", "복지기관", "단체", "공동체"];
   const partnerGroups = [
-    "공공기관",
-    "지방자치단체",
-    "공기업",
-    "민간기업",
-    "교육기관",
-    "복지기관",
-    "협회 · 단체",
-    "여성·취업지원기관",
+    "SK주식회사 C&C",
+    "현대제철",
+    "한국전력공사",
+    "롯데쇼핑",
+    "농림축산식품부",
+    "보건복지부",
+    "DB하이텍",
+    "하이브(HYBE)",
+    "한국항공우주산업(KAI)",
+    "램리서치",
+    "포스코에너지",
+    "국민건강보험공단",
+    "산림청",
+    "주택도시보증공사(HUG)",
+    "국방과학연구소",
+    "롯데카드",
+    "동국제강",
+    "한국남동발전",
+    "베올리아워터코리아",
+    "메트라이프",
+    "한국인삼공사",
+    "서울주택도시공사(SH)",
+    "한국환경공단",
+    "한국산업안전보건공단",
+    "한국부동산원",
+    "한국지능정보사회진흥원",
+    "한국표준과학연구원",
+    "주택관리공단",
+    "한전산업개발",
+    "hy(한국야쿠르트)",
+    "티씨케이(TCK)",
+    "해성디에스",
+    "부산시청",
+    "제주도청",
+    "부산광역시교육청",
+    "서울시인재개발원",
+    "울산과학기술원(UNIST)",
+    "경북대학교",
+    "부산교통공사",
+    "남해지방해양경찰청",
+    "부산환경공단",
+    "정선군청",
+    "국립농산물품질관리원",
+    "한국소비자원",
+    "롯데월드 어드벤처 부산",
+    "부산영상위원회",
+    "한국무역협회",
+    "부산대학교",
   ];
 
   const handleChange = (key, value) => {
@@ -511,21 +551,24 @@ export default function DeosotongCompanyHomepage() {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <div className="text-sm font-semibold text-slate-500">출강 분야 및 협업 대상</div>
-                <h3 className="mt-2 text-2xl font-bold tracking-tight">다양한 기관과 기업에서 함께해 왔습니다</h3>
+                <h3 className="mt-2 text-2xl font-bold tracking-tight">주요 교육실적</h3>
               </div>
               <p className="max-w-md text-sm leading-6 text-slate-600">
                 기업교육, 공공기관교육, 학교 및 복지기관 교육까지 현장에 맞는 방식으로 설계합니다.
               </p>
             </div>
-            <div className="mt-5 grid grid-cols-2 gap-3 lg:mt-6 lg:grid-cols-4">
+            <div className="mt-5 grid grid-cols-2 gap-x-3 gap-y-2 sm:grid-cols-3 lg:mt-6 lg:grid-cols-6">
               {partnerGroups.map((item) => (
                 <div
                   key={item}
-                  className="rounded-2xl border border-slate-200 bg-white px-4 py-4 text-sm font-medium text-slate-700 shadow-sm"
+                  className="flex min-h-[44px] items-center justify-center break-keep px-1 py-2 text-center text-sm font-medium leading-5 text-slate-700"
                 >
                   {item}
                 </div>
               ))}
+            </div>
+            <div className="mt-6 border-t border-slate-200 pt-5 text-center">
+              <a href="https://blog.naver.com/the-sotong" target="_blank" rel="noopener noreferrer" className="inline-block text-sm font-semibold text-blue-800 underline underline-offset-4">더소통컴퍼니 교육현장 및 출강 후기 보기 ↗</a>
             </div>
           </div>
         </section>
