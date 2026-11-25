@@ -459,11 +459,11 @@ export default function DeosotongCompanyHomepage() {
                       decoding="async"
                       className="w-full max-h-[360px] rounded-[24px] object-cover object-top sm:max-h-[440px] lg:max-h-[520px]"
                       onError={(event) => {
-                        // Fall back to the preserved original only if the compact version fails.
+                        // Fall back to a lightweight portrait JPEG if WebP loading fails.
                         const image = event.currentTarget;
-                        if (!image.dataset.originalFallback) {
-                          image.dataset.originalFallback = "true";
-                          image.src = "/kwon-profile.png";
+                        if (!image.dataset.jpegFallback) {
+                          image.dataset.jpegFallback = "true";
+                          image.src = "/kwon-profile-fallback.jpg";
                           return;
                         }
                         setRepImageError(true);
